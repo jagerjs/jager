@@ -1,0 +1,53 @@
+{
+	"name": "jager",
+	"version": "1.0.0",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/justim/jager"
+	},
+	"author": {
+		"name": "Tim",
+		"url": "https://github.com/justim"
+	},
+	"tags": [
+		"build"
+	],
+	"private": true,
+	"dependencies": {
+		"lodash": "~2.4.1",
+		"liftoff": "~0.11.3",
+		"async": "~0.9.0",
+		"chalk": "~0.4.0",
+		"minimist": "~0.1.0",
+		"pretty-hrtime": "~0.2.1",
+		"glob-watcher": "~0.0.6",
+		"growl": "~1.8.1",
+		"stack-trace": "~0.0.9",
+		"minimatch": "~1.0.0",
+
+		"bluebird": "~2.2.2",
+		"trycatch": "~1.5.11",
+
+		"uglify-js": "~2.4.13",
+		"ngmin": "~0.5.0",
+		"mkdirp": "~0.5.0",
+		"less": "~1.7.0",
+		"globule": "~0.2.0",
+		"autoprefixer": "~1.1.20140605",
+		"js-string-escape": "!~.0.0"
+	},
+	"devDependencies": {
+		"jshint-stylish": "~0.4.0"
+	},
+	"main": "jager.js",
+	"bin": {
+		"jager": "./cli.js"
+	},
+	"scripts": {
+		"lint": "jshint lib plugins cli.js jager.js --reporter node_modules/jshint-stylish/stylish.js --exclude node_modules"
+	},
+	"engineStrict": true,
+	"engines": {
+		"node": ">=0.9"
+	}
+}
