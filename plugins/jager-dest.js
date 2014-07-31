@@ -11,7 +11,7 @@ var __root = process.cwd();
 module.exports = function(target) {
 	return function dest(files, cb) {
 		function desti(file, cb) {
-			fs.writeFile(path.join(__root, target, path.basename(file.filename)), file.contents, function(err, rs) {
+			fs.writeFile(path.join(__root, target, path.basename(file.filename())), file.buffer(), function(err, rs) {
 				if (err) {
 					cb(err);
 				} else {

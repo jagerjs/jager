@@ -5,6 +5,8 @@ var async = require('async');
 var path = require('path');
 var jsStringEscape = require('js-string-escape');
 
+var jager = require('../jager');
+
 var __root = process.cwd();
 
 var prefix = 'angular.module("templates", []).run(["$templateCache", function($templateCache) {';
@@ -15,16 +17,13 @@ module.exports = function(options) {
 	var filename = options && options.filename || 'templates.js';
 
 	function process(file, cb) {
-		var url = file.filename.replace(path.join(__root, base), '');
-		cb(null, '$templateCache.put("' + url + '", "' + jsStringEscape(file.contents.toString('utf8')) + '");');
+		var url = file.filename().replace(path.join(__root, base), '');
+		cb(null, '$templateCache.put("' + url + '", "' + jsStringEscape(file.contents()) + '");');
 	}
 
 	return function autoprefixer(files, cb) {
 		async.map(files, process, function(err, files) {
-			cb(null, [{
-				filename: path.join(__root, base, filename),
-				contents: new Buffer(prefix + files.join('') + suffix)
-				}]);
+			cb(null, [new jager.File(path.join(__root, base, filename), new Buffer(prefix + files.join('') + suffix))]);
 		});
 	};
 };

@@ -12,6 +12,7 @@ var _ = require('lodash');
 var Chackle = require('./lib/Chackle');
 var Plugin = require('./lib/Plugin');
 var Task = require('./lib/Task');
+var File = require('./lib/File');
 
 var Logger = require('./lib/Logger');
 
@@ -72,5 +73,6 @@ module.exports = {
 				Logger.error('Unknown task: ' + task);
 			}
 		});
-	}
+	},
+	File: File
 };

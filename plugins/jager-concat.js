@@ -3,6 +3,8 @@
 
 var path = require('path');
 
+var jager = require('../jager');
+
 var __root = process.cwd();
 
 module.exports = function(filename) {
@@ -11,9 +13,11 @@ module.exports = function(filename) {
 	}
 
 	return function concat(files, cb) {
-		cb(null, [{
-			filename: path.join(__root, filename),
-			contents: Buffer.concat(files.map(function(file) { return file.contents; }))
-			}]);
+		var file = new jager.File(
+			path.join(__root, filename),
+			Buffer.concat(files.map(function(file) { return file.buffer(); }))
+			);
+
+		cb(null, [file]);
 	};
 };

@@ -9,28 +9,9 @@ var minimatch = require('minimatch');
 var async = require('async');
 var fs = require('fs');
 
+var jager = require('../jager');
+
 var __root = process.cwd();
-
-function getInfo(filename, cb) {
-	var file = { filename: path.join(__root, filename) };
-
-	fs.stat(filename, function(err, stat) {
-		if (err) {
-			cb(err);
-		} else {
-			file.stat = stat;
-
-			fs.readFile(filename, function(err, contents) {
-				if (err) {
-					cb(err);
-				} else {
-					file.contents = contents;
-					cb(null, file);
-				}
-			});
-		}
-	});
-}
 
 function loadBowerJson(base, cb) {
 	var defaultBowerJson = path.join(base, 'bower.json');
@@ -93,7 +74,7 @@ function createAdd(bowerJson) {
 							filenames = (Array.isArray(dependencyBowerJson.main) ? dependencyBowerJson.main : [dependencyBowerJson.main])
 								.map(function(filename) { return path.join(directory, name, filename); });
 
-							async.map(filenames, getInfo, function(err, newFiles) {
+							async.map(filenames, jager.File.create, function(err, newFiles) {
 								cb(err, {
 									jagerSrc: filenames,
 									newFiles: newFiles

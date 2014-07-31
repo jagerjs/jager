@@ -9,14 +9,14 @@ var __root = process.cwd();
 function compileLess(file, cb) {
 	var parser = new less.Parser({
 		paths: [__root],
-		filename: file.filename
+		filename: file.filename()
 	});
 
-	parser.parse(file.contents.toString('utf8'), function(err, tree) {
+	parser.parse(file.contents(), function(err, tree) {
 		if (err) {
 			cb(err);
 		} else {
-			file.contents = new Buffer(tree.toCSS({ compress: false }));
+			file.contents(tree.toCSS({ compress: false }));
 			cb(null, file);
 		}
 	});

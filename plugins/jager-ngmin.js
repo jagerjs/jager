@@ -6,7 +6,7 @@ var async = require('async');
 
 module.exports = function(browserVersions) {
 	function processNgmin(file, cb) {
-		file.contents = new Buffer(ngmin.annotate(file.contents.toString('utf8')));
+		file.contents(ngmin.annotate(file.contents()));
 		cb(null, file);
 	}
 

@@ -1,33 +1,11 @@
 
 'use strict';
 
-var path = require('path');
 var globule = require('globule');
 var async = require('async');
-var fs = require('fs');
+var jager = require('../jager');
 
 var __root = process.cwd();
-
-function getInfo(filename, cb) {
-	var file = { filename: path.join(__root, filename) };
-
-	fs.stat(filename, function(err, stat) {
-		if (err) {
-			cb(err);
-		} else {
-			file.stat = stat;
-
-			fs.readFile(filename, function(err, contents) {
-				if (err) {
-					cb(err);
-				} else {
-					file.contents = contents;
-					cb(null, file);
-				}
-			});
-		}
-	});
-}
 
 module.exports = function(input, options) {
 	options = options || {};
@@ -41,7 +19,7 @@ module.exports = function(input, options) {
 			this.jagerSrcDependencies = (this.jagerSrcDependencies || []).concat([options.dependencies]);
 		}
 
-		async.map(filenames, getInfo, function(err, newFiles) {
+		async.map(filenames, jager.File.create, function(err, newFiles) {
 			cb(err, files.concat(newFiles));
 		});
 	};

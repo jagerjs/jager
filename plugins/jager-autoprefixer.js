@@ -6,7 +6,7 @@ var async = require('async');
 
 module.exports = function(browserVersions) {
 	function prefix(file, cb) {
-		file.contents = new Buffer(autoprefixer(browserVersions).process(file.contents.toString('utf8')).css);
+		file.contents(autoprefixer(browserVersions).process(file.contents()).css);
 		cb(null, file);
 	}
 
