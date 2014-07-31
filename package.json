@@ -34,7 +34,7 @@
 		"less": "~1.7.0",
 		"globule": "~0.2.0",
 		"autoprefixer": "~1.1.20140605",
-		"js-string-escape": "!~.0.0"
+		"js-string-escape": "~1.0.0"
 	},
 	"devDependencies": {
 		"jshint-stylish": "~0.4.0"
