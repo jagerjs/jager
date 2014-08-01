@@ -2,11 +2,6 @@
 // _@/' _@/' _@/' _@/' _@/' _@/' _@/' _@/' _@/' _@/' _@/' _@/' _@/'? '\@_
 'use strict';
 
-var trycatch = require('trycatch');
-trycatch.configure({
-	'long-stack-traces': true
-});
-
 var _ = require('lodash');
 
 var Chackle = require('./lib/Chackle');
