@@ -11,10 +11,13 @@ var __root = process.cwd();
 module.exports = function(target) {
 	return function dest(files, cb) {
 		function desti(file, cb) {
-			fs.writeFile(path.join(__root, target, path.basename(file.filename())), file.buffer(), function(err, rs) {
+			var filename = path.join(target, path.basename(file.filename()));
+
+			fs.writeFile(path.join(__root, filename), file.buffer(), function(err, rs) {
 				if (err) {
 					cb(err);
 				} else {
+					file.rename(filename);
 					cb(null, file);
 				}
 			});
