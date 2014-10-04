@@ -1,6 +1,6 @@
 {
 	"name": "jager",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"repository": {
 		"type": "git",
 		"url": "git://github.com/justim/jager"
@@ -27,6 +27,7 @@
 		"bluebird": "~2.2.2",
 		"trycatch": "~1.5.11",
 
+		"tiny-lr": "~0.1.4",
 		"uglify-js": "~2.4.13",
 		"ngmin": "~0.5.0",
 		"mkdirp": "~0.5.0",

@@ -41,6 +41,7 @@ jager.task('watch', { watch: true }, [js, less]);
 * `angular-templates`: Create a js-file with all a template cache
 * `ngmin`: Create a version of angular-js-file that is uglify save
 * `bower-src`: Add files from your bower config
+* `livereload`: Reloads your browser when files change
 
 ## TODO
 
