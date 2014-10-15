@@ -5,13 +5,34 @@ var tinylr = require('tiny-lr');
 
 var defaultPort = 35729;
 var servers = {};
+var mtimeCache = {};
 
 function notify(livereloadServer, files, cb) {
-	livereloadServer.changed({
-		body: {
-			files: files.length ? files.map(function(file) { return file.filename(); }) : ['*']
-		}
-	});
+	var filesToNotify;
+
+	if (files.length) {
+		filesToNotify = [];
+
+		files.forEach(function(file) {
+			var filename = file.filename();
+
+			if (!mtimeCache[filename] || mtimeCache[filename] < file.stat().mtime) {
+				filesToNotify.push(filename);
+			}
+
+			mtimeCache[filename] = file.stat().mtime;
+		});
+	} else {
+		filesToNotify = ['*'];
+	}
+
+	if (filesToNotify.length) {
+		livereloadServer.changed({
+			body: {
+				files: filesToNotify
+			}
+		});
+	}
 
 	cb(null, files);
 }
