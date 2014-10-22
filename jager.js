@@ -40,8 +40,16 @@ function getChackleBuilder() {
 var tasks = {};
 
 module.exports = {
-	create: function create(input, options) {
-		return getChackleBuilder();
+	create: function create(start) {
+		var chackleBuilder = getChackleBuilder();
+
+		if (start) {
+			start.forEach(function(item) {
+				chackleBuilder = chackleBuilder.apply(null, item);
+			});
+		}
+
+		return chackleBuilder;
 	},
 	task: function task(/* name, [options,] chain */) {
 		var args = Array.prototype.slice.call(arguments);
