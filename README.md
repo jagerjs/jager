@@ -7,6 +7,9 @@
 ```js
 var jager = require('jager');
 
+var livereload = jager.create()
+	('livereload');
+
 var js = jager.create()
 	('src', 'jagerfile.js')
 	('uglify')
@@ -14,7 +17,7 @@ var js = jager.create()
 	('dest', '.');
 
 jager.task('js', js);
-jager.task('watch:js', { watch: true },  js);
+jager.task('watch:js', { watch: true },  js, livereload);
 
 var less = jager.create()
 	('src', 'main.less', { dependencies: '*.less' })
@@ -24,9 +27,9 @@ var less = jager.create()
 	('dest', '.');
 
 jager.task('less', less);
-jager.task('watch:less', { watch: true }, less);
+jager.task('watch:less', { watch: true }, less, livereload);
 
-jager.task('watch', { watch: true }, [js, less]);
+jager.task('watch', { watch: true }, [js, less], livereload);
 ```
 
 ## Built-in helpers
