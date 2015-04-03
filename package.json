@@ -34,9 +34,9 @@
 		"uglify-js": "~2.4.13",
 		"ngmin": "~0.5.0",
 		"mkdirp": "~0.5.0",
-		"less": "~1.7.0",
+		"less": "~2.5.0",
 		"globule": "~0.2.0",
-		"autoprefixer": "~1.1.20140605",
+		"autoprefixer": "~5.1.0",
 		"js-string-escape": "~1.0.0"
 	},
 	"devDependencies": {
