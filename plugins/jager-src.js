@@ -5,8 +5,6 @@ var globule = require('globule');
 var async = require('async');
 var jager = require('../jager');
 
-var __root = process.cwd();
-
 module.exports = function(input, options) {
 	options = options || {};
 
@@ -19,8 +17,32 @@ module.exports = function(input, options) {
 			this.jagerSrcDependencies = (this.jagerSrcDependencies || []).concat([options.dependencies]);
 		}
 
-		async.map(filenames, jager.File.create, function(err, newFiles) {
-			cb(err, files.concat(newFiles));
-		});
+		function asyncMapCallback(err, newFiles) {
+			var filteredFiles;
+
+			if (err) {
+				cb(err);
+			} else {
+				filteredFiles = newFiles.filter(function(file) {
+					return file !== null;
+				});
+
+				cb(null, files.concat(filteredFiles));
+			}
+		}
+
+		async.map(filenames, function(filename, cb) {
+			jager.File.create(filename, function(err, file) {
+				if (err) {
+					if (err.code === 'EISDIR') {
+						cb(null, null);
+					} else {
+						cb(err);
+					}
+				} else {
+					cb(null, file);
+				}
+			});
+		}, asyncMapCallback);
 	};
 };
