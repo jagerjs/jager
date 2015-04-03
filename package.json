@@ -28,6 +28,9 @@
 		"trycatch": "~1.5.11",
 
 		"tiny-lr": "~0.1.4",
+		"browserify": "~9.0.3",
+		"babelify": "~5.0.4",
+		"babel": "~4.7.13",
 		"uglify-js": "~2.4.13",
 		"ngmin": "~0.5.0",
 		"mkdirp": "~0.5.0",
