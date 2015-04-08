@@ -1,25 +1,32 @@
 
 'use strict';
 
+var path = require('path');
+var extend = require('util')._extend;
+
 var async = require('async');
 var less = require('less');
-var extend = require('util')._extend;
 
 var __root = process.cwd();
 
 function compileLess(options, file, cb) {
-	var pluginMandatoryOptions = {
-		paths: [__root],
-		filename: file.filename(),
+	var basePath = options.basePath || __root;
+
+	var lessOptions = {
+		paths: [basePath],
+		filename: path.relative(__root, file.filename()),
 	};
 
-	extend(options, pluginMandatoryOptions);
+	extend(lessOptions, options);
 
 	if (options.sourceMap === 'inline') {
-		options.sourceMap = { sourceMapFileInline: true };
+		lessOptions.sourceMap = {
+			sourceMapFileInline: true,
+			outputSourceFiles: true,
+		};
 	}
 
-	less.render(file.contents(), options)
+	less.render(file.contents(), lessOptions)
 		.then(function(output) {
 			file.contents(output.css);
 			cb(null, file);
