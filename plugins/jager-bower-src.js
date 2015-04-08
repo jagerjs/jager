@@ -4,12 +4,13 @@
 'use strict';
 
 var path = require('path');
+var fs = require('fs');
+
 var globule = require('globule');
 var minimatch = require('minimatch');
 var async = require('async');
-var fs = require('fs');
 
-var jager = require('../jager');
+var jager = require('./../jager');
 
 var __root = process.cwd();
 

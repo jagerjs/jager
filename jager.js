@@ -51,7 +51,7 @@ module.exports = {
 
 		return chackleBuilder;
 	},
-	task: function task(/* name, [options,] chain */) {
+	task: function task(/* name, [options,] chain[, chain[, chain ...]] */) {
 		var args = Array.prototype.slice.call(arguments);
 		var name = args.shift();
 		var options = _.isPlainObject(args[0]) ? args.shift() : {};

@@ -1,8 +1,9 @@
 
 'use strict';
 
-var async = require('async');
 var path = require('path');
+
+var async = require('async');
 var jsStringEscape = require('js-string-escape');
 
 var jager = require('../jager');
@@ -21,7 +22,7 @@ module.exports = function(options) {
 		cb(null, '$templateCache.put("' + url + '", "' + jsStringEscape(file.contents()) + '");');
 	}
 
-	return function autoprefixer(files, cb) {
+	return function angularTemplates(files, cb) {
 		async.map(files, process, function(err, files) {
 			cb(null, [new jager.File(path.join(__root, base, filename), new Buffer(prefix + files.join('') + suffix))]);
 		});

@@ -3,7 +3,7 @@
 
 var globule = require('globule');
 var async = require('async');
-var jager = require('../jager');
+var jager = require('./../jager');
 
 module.exports = function(input, options) {
 	options = options || {};
@@ -23,6 +23,7 @@ module.exports = function(input, options) {
 			if (err) {
 				cb(err);
 			} else {
+				// TODO filter out directories in globule call
 				filteredFiles = newFiles.filter(function(file) {
 					return file !== null;
 				});

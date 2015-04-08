@@ -46,7 +46,7 @@ module.exports = function(options) {
 			livereloadServer: new tinylr.Server(options),
 			listening: false,
 			startup: false,
-			callbacks: []
+			callbacks: [],
 		};
 	}
 

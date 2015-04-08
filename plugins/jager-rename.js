@@ -3,7 +3,7 @@
 
 var path = require('path');
 
-var jager = require('../jager');
+var jager = require('./../jager');
 
 var __root = process.cwd();
 
