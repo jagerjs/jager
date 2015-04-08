@@ -1,65 +1,102 @@
 
 'use strict';
 
+var path = require('path');
+
 var async = require('async');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var babelify = require('babelify');
+var mold = require('mold-source-map');
 var extend = require('util')._extend;
 
 var __root = process.cwd();
 
-var babelOptions = {
-	blacklist: ['useStrict'],
-};
-
 var _instanceCache = {};
 
-function getBrowserify(options, file) {
-	var debug = !!options.sourceMap;
-	var b = browserify({
-		debug: debug,
-		detectGlobals: false,
-		insertGlobals: true,
-		cache: {},
-		packageCache: {},
-		fullPaths: true
-	});
+function getBabelTransform(options) {
+	var babelOptions = {
+		blacklist: ['useStrict'],
+	};
 
-	if (options.babel) {
-		b.transform(babelify.configure(babelOptions));
+	if (typeof options === 'object') {
+		extend(babelOptions, options);
 	}
 
-	b.require(file.filename(), { entry: true });
-
-	return b;
+	return babelify.configure(babelOptions);
 }
 
-var phr = require('pretty-hrtime');
-
-function processBrowserify(options, addDependency, file, cb) {
+function createBrowserifyInstance(options, file) {
+	var browserifyOptions = {
+		debug: !!options.sourceMap,
+	};
 	var b;
 
-	var s = process.hrtime();
+	if (options.watch) {
+		// used by watchify
+		extend(browserifyOptions, {
+			cache: {},
+			packageCache: {},
+			fullPaths: true,
+		});
+	}
+
+	extend(browserifyOptions, options);
+
+	b = browserify(browserifyOptions);
+
+	if (options.babel) {
+		b.transform(getBabelTransform(options.babel));
+	}
+
+	return b.require(file.filename(), { entry: true });
+}
+
+function getBrowserifyInstance(options, addDependency, file) {
 	if (!_instanceCache[file.filename()]) {
-		b = getBrowserify(options, file);
-		b.on('file', addDependency);
+		_instanceCache[file.filename()] = createBrowserifyInstance(options, file);
+		_instanceCache[file.filename()].on('file', addDependency);
 
 		if (options.watch) {
-			_instanceCache[file.filename()] = watchify(b);
+			_instanceCache[file.filename()] = watchify(_instanceCache[file.filename()]);
 		} else {
-			_instanceCache[file.filename()] = b;
+			_instanceCache[file.filename()] = _instanceCache[file.filename()];
 		}
 	}
 
-	_instanceCache[file.filename()].bundle(function(err, result) {
-		if (err) {
+	return _instanceCache[file.filename()];
+}
+
+function processBrowserify(options, addDependency, file, cb) {
+	var b = getBrowserifyInstance(options, addDependency, file);
+	var stream = _instanceCache[file.filename()].bundle();
+	var bufferList = [];
+
+	if (options.sourceMap) {
+		stream = stream.pipe(mold.transformSources(function(file) {
+			var base;
+
+			if (options.sourceMap && options.sourceMap.sourceMapBasepath) {
+				base = path.join(__root, options.sourceMap.sourceMapBasepath);
+			} else {
+				base = __root;
+			}
+
+			return path.relative(base, file);
+		}));
+	}
+
+	return stream
+		.on('data', function(part) {
+			bufferList.push(part);
+		}).
+		on('error', function(err) {
 			cb(err);
-		} else {
-			file.buffer(result);
+		})
+		.on('end', function() {
+			file.buffer(Buffer.concat(bufferList));
 			cb(null, file);
-		}
-	});
+		});
 }
 
 module.exports = function(options) {
