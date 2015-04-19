@@ -54,6 +54,7 @@ jager.task('watch', { watch: true }, [js, less], livereload);
 - [`bower-src`: Add files from your bower config](#bower-src-add-files-from-your-bower-config)
 - [`babel`: Transform ES6 to ES5 javascript](#babel-transform-es6-to-es5-javascript)
 - [`livereload`: Reloads your browser when files change](#livereload-reloads-your-browser-when-files-change)
+- [`imagemin`: Minify images seamlessly](#imagemin-minify-images-seamlessly)
 
 ### `src`: Add source files
 
@@ -114,7 +115,7 @@ Combine all files in the chain into a new file
 
 - `filename`: The filename for the new file
 
-### `rename`: Rename a file 
+### `rename`: Rename a file
 
 Rename the first file in the chain, if it doesn't exist, an empty file is added to the chain
 
@@ -142,7 +143,7 @@ Plugin to parse CSS and add vendor prefixes to CSS rules using values from [Can 
 **API**: `('autoprefixer'[, browserVersions])`
 
 - `browserVersions`: [List of browser you wan to support]
- 
+
 [List of browser you wan to support]: https://github.com/postcss/autoprefixer/blob/master/README.md#browsers
 
 ### `angular-templates`: Create cache file for all angular templates
@@ -192,3 +193,21 @@ Notify the browser of any changes in your chain, compatible with at least the [C
 
 [Chrome plugin]: https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei
 [Firefox plugin]: https://addons.mozilla.org/en-us/firefox/addon/livereload/
+
+### `imagemin`: Minify images seamlessly
+
+Minifies all images (based on extension) in the chain with [imagemin].
+
+**API**: `('imagemin'[, options])`
+
+- `options`:
+	- `gif`: See [gifsicle options] for more information
+	- `jpegtran`: See [jpegtran options] for more information
+	- `optipng`: See [optipng options] for more information
+	- `svgo`: See [svgo options] for more information
+
+[imagemin]: https://github.com/imagemin/imagemin
+[gifsicle options]: https://github.com/imagemin/imagemin-gifsicle
+[jpegtran options]: https://github.com/imagemin/imagemin-jpegtran
+[optipng options]: https://github.com/imagemin/imagemin-optipng
+[svgo options]: https://github.com/imagemin/imagemin-svgo
