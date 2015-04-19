@@ -30,8 +30,8 @@ function single(target, basePath, checkContents, file, cb) {
 	fs.stat(to, function(err, stat) {
 		if (stat) {
 			if (checkContents) {
-				fs.readFile(to, 'utf8', function(err, contents) {
-					if (err || file.contents() !== contents) {
+				fs.readFile(to, function(err, contents) {
+					if (err || !file.buffer().equals(contents)) {
 						report(false);
 					} else {
 						report(true, stat);

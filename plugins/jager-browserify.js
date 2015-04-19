@@ -88,7 +88,7 @@ function processBrowserify(options, addDependency, file, cb) {
 
 	return stream
 		.on('data', function(part) {
-			bufferList.push(part);
+			bufferList.push(new Buffer(part));
 		}).
 		on('error', function(err) {
 			cb(err);
