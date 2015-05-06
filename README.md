@@ -1,5 +1,7 @@
 # Jager
 
+> A simple build tool with a fluent interface
+
 ## Example
 ```js
 var jager = require('jager');
