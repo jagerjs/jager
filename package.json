@@ -38,6 +38,7 @@
 		"imagemin": "~3.1.0",
 		"mkdirp": "~0.5.0",
 		"less": "~2.5.0",
+		"postcss": "~4.1.8",
 		"globule": "~0.2.0",
 		"autoprefixer": "~5.1.0",
 		"js-string-escape": "~1.0.0"

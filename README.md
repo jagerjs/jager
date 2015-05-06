@@ -55,6 +55,7 @@ jager.task('watch', { watch: true }, [js, less], livereload);
 - [`babel`: Transform ES6 to ES5 javascript](#babel-transform-es6-to-es5-javascript)
 - [`livereload`: Reloads your browser when files change](#livereload-reloads-your-browser-when-files-change)
 - [`imagemin`: Minify images seamlessly](#imagemin-minify-images-seamlessly)
+- [`postcss`: Transforming CSS with JS plugins](#postcss-transforming-css-with-js-plugins)
 
 ### `src`: Add source files
 
@@ -211,3 +212,15 @@ Minifies all images (based on extension) in the chain with [imagemin].
 [jpegtran options]: https://github.com/imagemin/imagemin-jpegtran
 [optipng options]: https://github.com/imagemin/imagemin-optipng
 [svgo options]: https://github.com/imagemin/imagemin-svgo
+
+### `postcss`: Transforming CSS with JS plugins
+
+[PostCSS] is a tool for transforming CSS with JS plugins. These plugins can support variables and mixins, transpile future CSS syntax, inline images, and more.
+
+**API**: `('postcss'[, options])`
+
+- `options`:
+	- `plugins`: Plugins used by [PostCSS], see [PostCSS plugin options]
+
+[PostCSS]: https://github.com/postcss/postcss
+[PostCSS plugin options]: https://github.com/postcss/postcss#usage
