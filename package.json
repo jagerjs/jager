@@ -3,7 +3,7 @@
 	"version": "1.1.1",
 	"repository": {
 		"type": "git",
-		"url": "git://github.com/justim/jager"
+		"url": "git://github.com/jagerjs/jager"
 	},
 	"author": {
 		"name": "Tim",
@@ -12,7 +12,6 @@
 	"tags": [
 		"build"
 	],
-	"private": true,
 	"dependencies": {
 		"lodash": "~2.4.1",
 		"liftoff": "~0.11.3",
@@ -24,7 +23,6 @@
 		"growl": "~1.8.1",
 		"minimatch": "~1.0.0",
 
-		"bluebird": "~2.2.2",
 		"trycatch": "~1.5.11",
 
 		"tiny-lr": "~0.1.4",
@@ -53,7 +51,7 @@
 	"scripts": {
 		"lint": "jshint lib plugins cli.js jager.js --reporter node_modules/jshint-stylish/stylish.js --exclude node_modules"
 	},
-	"engineStrict": true,
+	"engine-strict": true,
 	"engines": {
 		"node": ">=0.11"
 	}
