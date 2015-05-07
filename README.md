@@ -40,7 +40,60 @@ jager.task('watch:less', { watch: true }, less, livereload);
 jager.task('watch', { watch: true }, [js, less], livereload);
 ```
 
+## Usage
+
+Install with `npm install --save jager` and `npm install -g jager`, after create a `Jagerfile.js` file (see example above) in your project root. Then you can run `jager [task]` to execute your task.
+
+Alternatively you can skip the global install and use the version in `node_modules/.bin/`, which is automatically added to your `PATH` when you run it with `npm run`. For example, the following `package.json` script would run the watch task without the globally installed version.
+
+```json
+{
+	"scripts": {
+		"watch": "jager watch"
+	}
+}
+```
+
+Run with `npm run watch`, no need for the global!
+
+## Create a plugin
+
+Plugins have pretty simple structure, like so:
+
+```js
+module.exports = function(options) {
+	// the arguments to this function come from the `Jagerfile.js` file, for example:
+	// `('src', 'script.js')` would give the `'script.js'` as argument
+
+	return function(files, cb) {
+		// files contains an array with `jager.File` instances, which you can manipulate
+		cb(null, files);
+	};
+};
+```
+
+Jager automatically loads plugins when they follow the convention that when the module name is `jager-something-something`, it will load that plugin whenn you call it with `('something-something')`. You can also just pass the function you normally return in your plugin directly to Jager:
+
+```js
+jager.create()
+	(function(files, cb) {
+		cb(null, files);
+	});
+```
+
+## `jager.File`
+
+- `filename()`: Return the filename for the file
+- `contents([string])`: When an argument is given, the contents are updated. Returns the contents
+- `buffer([buffer]))`: When an argument is given, the internal buffer is updated. Return the internal buffer
+- `stat([stat])`: When an argument is given, the stat is updated. Return the stat
+- `rename(filename)`: Rename the file, the stat is updated to now
+
+You can use both `contents()` and `buffer()` mixed, they will be converted on the fly when needed.
+
 ## Built-in plugins
+
+Jager has some builtin plugins to get you started:
 
 - [`src`: Add source files](#src-add-source-files)
 - [`dest`: Write files](#dest-write-files)
