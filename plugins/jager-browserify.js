@@ -37,7 +37,6 @@ function createBrowserifyInstance(options, file) {
 		extend(browserifyOptions, {
 			cache: {},
 			packageCache: {},
-			fullPaths: true,
 		});
 	}
 
@@ -69,11 +68,32 @@ function getBrowserifyInstance(options, addDependency, file) {
 
 function processBrowserify(options, addDependency, file, cb) {
 	var b = getBrowserifyInstance(options, addDependency, file);
-	var stream = _instanceCache[file.filename()].bundle();
+	var stream = b.bundle();
 	var bufferList = [];
+	var errorEmitted = false;
 
+	stream.on('data', function(part) {
+			bufferList.push(new Buffer(part));
+		})
+		.on('error', function(err) {
+			errorEmitted = true;
+
+			if (err.codeFrame) {
+				err.message += '\n' + err.codeFrame;
+			}
+
+			cb(err);
+		})
+		.on('end', function() {
+			if (!errorEmitted) {
+				file.buffer(Buffer.concat(bufferList));
+				cb(null, file);
+			}
+		});
+
+	// we need to do this after the event handlers, .pipe returns a stream without them
 	if (options.sourceMap) {
-		stream = stream.pipe(mold.transformSources(function(file) {
+		stream.pipe(mold.transformSources(function(file) {
 			var base;
 
 			if (options.sourceMap && options.sourceMap.sourceMapBasepath) {
@@ -85,18 +105,6 @@ function processBrowserify(options, addDependency, file, cb) {
 			return path.relative(base, file);
 		}));
 	}
-
-	return stream
-		.on('data', function(part) {
-			bufferList.push(new Buffer(part));
-		}).
-		on('error', function(err) {
-			cb(err);
-		})
-		.on('end', function() {
-			file.buffer(Buffer.concat(bufferList));
-			cb(null, file);
-		});
 }
 
 module.exports = function(options) {
