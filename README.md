@@ -111,6 +111,7 @@ Jager has some builtin plugins to get you started:
 - [`livereload`: Reloads your browser when files change](#livereload-reloads-your-browser-when-files-change)
 - [`imagemin`: Minify images seamlessly](#imagemin-minify-images-seamlessly)
 - [`postcss`: Transforming CSS with JS plugins](#postcss-transforming-css-with-js-plugins)
+- [`extract-sourcemap`: Extract sourcemaps into separate files](#extract-sourcemap-extract-sourcemaps-into-separate-files)
 
 ### `src`: Add source files
 
@@ -281,3 +282,9 @@ Minifies all images (based on extension) in the chain with [imagemin].
 
 [PostCSS]: https://github.com/postcss/postcss
 [PostCSS plugin options]: https://github.com/postcss/postcss#usage
+
+### `extract-sourcemap`: Extract sourcemaps into separate files
+
+**API**: `('extract-sourcemap')`
+
+Creates a file in the same directory as the input file, with a `.map` suffix. The sourcemap in the file is replace with a comment referencing the new file.
