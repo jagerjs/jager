@@ -177,7 +177,9 @@ Rename the first file in the chain, if it doesn't exist, an empty file is added 
 
 **API**: `('rename', filename)`
 
-- `filename`: the new filename
+- `filename`: the new filename. The following replacements will be done in the filename:
+	- `[timestamp]`: the current timestamp is included
+	- `[hash]`: the md5 checksum of the contents is included
 
 ### `less`: Process less files
 
