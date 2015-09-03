@@ -112,6 +112,7 @@ Jager has some builtin plugins to get you started:
 - [`imagemin`: Minify images seamlessly](#imagemin-minify-images-seamlessly)
 - [`postcss`: Transforming CSS with JS plugins](#postcss-transforming-css-with-js-plugins)
 - [`extract-sourcemap`: Extract sourcemaps into separate files](#extract-sourcemap-extract-sourcemaps-into-separate-files)
+- [`modernizr`: Create on the fly modernizr builds](#modernizr-create-on-the-fly-modernizr-builds)
 
 ### `src`: Add source files
 
@@ -288,3 +289,11 @@ Minifies all images (based on extension) in the chain with [imagemin].
 **API**: `('extract-sourcemap')`
 
 Creates a file in the same directory as the input file, with a `.map` suffix. The sourcemap in the file is replace with a comment referencing the new file.
+
+### `modernizr`: Create on the fly modernizr builds
+
+**API**: `('modernizr'[, options])`
+
+- `options`: see the [modernizr options] for all available options
+
+[modernizr options]: https://github.com/Modernizr/Modernizr/blob/master/lib/config-all.json
