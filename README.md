@@ -1,4 +1,4 @@
-# Jager
+# Jager [![Jager on NPM](http://img.shields.io/npm/v/jager.svg)](https://www.npmjs.com/package/jager)
 
 > A simple build tool with a fluent interface
 
