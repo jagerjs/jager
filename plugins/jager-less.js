@@ -9,7 +9,7 @@ var less = require('less');
 
 var __root = process.cwd();
 
-function compileLess(options, file, cb) {
+function compileLess(context, options, file, cb) {
 	var basePath = options.basePath || __root;
 
 	var lessOptions = {
@@ -28,6 +28,7 @@ function compileLess(options, file, cb) {
 
 	less.render(file.contents(), lessOptions)
 		.then(function(output) {
+			context.addDependency(output.imports);
 			file.contents(output.css);
 			cb(null, file);
 		},
@@ -40,6 +41,6 @@ module.exports = function(options) {
 	options = options || {};
 
 	return function less(files, cb) {
-		async.map(files, compileLess.bind(null, options), cb);
+		async.map(files, compileLess.bind(null, this, options), cb);
 	};
 };

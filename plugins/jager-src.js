@@ -11,10 +11,10 @@ module.exports = function(input, options) {
 	return function src(files, cb) {
 		var filenames = globule.find(Array.isArray(input) ? input : [input]);
 
-		this.jagerSrc = (this.jagerSrc || []).concat([input]);
+		this.addSource(input);
 
 		if (options.dependencies) {
-			this.jagerSrcDependencies = (this.jagerSrcDependencies || []).concat([options.dependencies]);
+			this.addDependency(options.dependencies);
 		}
 
 		function asyncMapCallback(err, newFiles) {

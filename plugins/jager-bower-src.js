@@ -77,7 +77,7 @@ function createAdd(bowerJson) {
 
 							async.map(filenames, jager.File.create, function(err, newFiles) {
 								cb(err, {
-									jagerSrc: filenames,
+									filenames: filenames,
 									newFiles: newFiles
 								});
 							});
@@ -111,7 +111,7 @@ module.exports = function(name) {
 						cb(err);
 					} else {
 						results.forEach(function(result) {
-							that.jagerSrc = (that.jagerSrc || []).concat(result.filenames);
+							that.addSource(result.filenames);
 							files = files.concat(result.newFiles);
 						});
 

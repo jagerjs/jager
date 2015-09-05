@@ -114,10 +114,10 @@ module.exports = function(options) {
 		var that = this;
 
 		function addDependency(dependency) {
-			that.jagerSrcDependencies = (that.jagerSrcDependencies || []).concat([dependency]);
+			that.addDependency(dependency);
 		}
 
-		if (this.watch) {
+		if (this.isWatching()) {
 			options.watch = true;
 		}
 
