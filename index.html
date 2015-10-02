@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Jager by jagerjs</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Jager</h1>
+        <h2>A simple build tool with a fluent interface</h2>
+        <a href="https://github.com/jagerjs/jager" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="jager-" class="anchor" href="#jager-" aria-hidden="true"><span class="octicon octicon-link"></span></a>Jager <a href="https://www.npmjs.com/package/jager"><img src="http://img.shields.io/npm/v/jager.svg" alt="Jager on NPM"></a>
+</h1>
+
+<blockquote>
+<p>A simple build tool with a fluent interface</p>
+</blockquote>
+
+<h2>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h2>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> jager <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>jager<span class="pl-pds">'</span></span>);
+
+<span class="pl-c">// create a new chain of actions</span>
+<span class="pl-k">var</span> livereload <span class="pl-k">=</span> jager.create()
+    (<span class="pl-s"><span class="pl-pds">'</span>livereload<span class="pl-pds">'</span></span>); <span class="pl-c">// add a plugin to the chain</span>
+
+<span class="pl-c">// create a chain which handles the javascript processing</span>
+<span class="pl-k">var</span> js <span class="pl-k">=</span> jager.create()
+    (<span class="pl-s"><span class="pl-pds">'</span>src<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>jagerfile.js<span class="pl-pds">'</span></span>) <span class="pl-c">// source of the chain</span>
+    (<span class="pl-s"><span class="pl-pds">'</span>uglify<span class="pl-pds">'</span></span>) <span class="pl-c">// chain it to the uglify plugin</span>
+    (<span class="pl-s"><span class="pl-pds">'</span>rename<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>renamed-jagerfile.js<span class="pl-pds">'</span></span>) <span class="pl-c">//  rename the file</span>
+    (<span class="pl-s"><span class="pl-pds">'</span>dest<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>.<span class="pl-pds">'</span></span>); <span class="pl-c">// write the file</span>
+
+<span class="pl-c">// create tasks to execute the defined chains</span>
+jager.task(<span class="pl-s"><span class="pl-pds">'</span>js<span class="pl-pds">'</span></span>, js);
+
+<span class="pl-c">// `{ watch: true }` is used to tell jager to rerun the task when</span>
+<span class="pl-c">// any of the source files or its dependencies change</span>
+jager.task(<span class="pl-s"><span class="pl-pds">'</span>watch:js<span class="pl-pds">'</span></span>, { watch<span class="pl-k">:</span> <span class="pl-c1">true</span> },  js, livereload);
+
+<span class="pl-c">// create a chain to process the less files</span>
+<span class="pl-k">var</span> less <span class="pl-k">=</span> jager.create()
+    (<span class="pl-s"><span class="pl-pds">'</span>src<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>main.less<span class="pl-pds">'</span></span>, { dependencies<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>*.less<span class="pl-pds">'</span></span> }) <span class="pl-c">// specify a source file and a list of possible dependencies</span>
+    (<span class="pl-s"><span class="pl-pds">'</span>less<span class="pl-pds">'</span></span>) <span class="pl-c">// chain it to the less plugin</span>
+    (<span class="pl-s"><span class="pl-pds">'</span>rename<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>main.css<span class="pl-pds">'</span></span>) <span class="pl-c">// rename it</span>
+    (<span class="pl-s"><span class="pl-pds">'</span>autoprefixer<span class="pl-pds">'</span></span>) <span class="pl-c">// call the autoprefixer plugin on it</span>
+    (<span class="pl-s"><span class="pl-pds">'</span>dest<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>.<span class="pl-pds">'</span></span>); <span class="pl-c">// write the file</span>
+
+<span class="pl-c">// create tasks for the less chains</span>
+jager.task(<span class="pl-s"><span class="pl-pds">'</span>less<span class="pl-pds">'</span></span>, less);
+jager.task(<span class="pl-s"><span class="pl-pds">'</span>watch:less<span class="pl-pds">'</span></span>, { watch<span class="pl-k">:</span> <span class="pl-c1">true</span> }, less, livereload);
+
+<span class="pl-c">// create a task for two chains, which will run simultaneously</span>
+jager.task(<span class="pl-s"><span class="pl-pds">'</span>watch<span class="pl-pds">'</span></span>, { watch<span class="pl-k">:</span> <span class="pl-c1">true</span> }, [js, less], livereload);</pre></div>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Install with <code>npm install --save jager</code> and <code>npm install -g jager</code>, after create a <code>Jagerfile.js</code> file (see example above) in your project root. Then you can run <code>jager [task]</code> to execute your task.</p>
+
+<p>Alternatively you can skip the global install and use the version in <code>node_modules/.bin/</code>, which is automatically added to your <code>PATH</code> when you run it with <code>npm run</code>. For example, the following <code>package.json</code> script would run the watch task without the globally installed version.</p>
+
+<div class="highlight highlight-source-json"><pre>{
+    <span class="pl-s"><span class="pl-pds">"</span>scripts<span class="pl-pds">"</span></span>: {
+        <span class="pl-s"><span class="pl-pds">"</span>watch<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>jager watch<span class="pl-pds">"</span></span>
+    }
+}</pre></div>
+
+<p>Run with <code>npm run watch</code>, no need for the global!</p>
+
+<h2>
+<a id="create-a-plugin" class="anchor" href="#create-a-plugin" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create a plugin</h2>
+
+<p>Plugins have pretty simple structure, like so:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c1">module</span>.<span class="pl-en">exports</span> <span class="pl-k">=</span> <span class="pl-k">function</span>(<span class="pl-smi">options</span>) {
+    <span class="pl-c">// the arguments to this function come from the `Jagerfile.js` file, for example:</span>
+    <span class="pl-c">// `('src', 'script.js')` would give the `'script.js'` as argument</span>
+
+    <span class="pl-k">return</span> <span class="pl-k">function</span>(<span class="pl-smi">files</span>, <span class="pl-smi">cb</span>) {
+        <span class="pl-c">// files contains an array with `jager.File` instances, which you can manipulate</span>
+        cb(<span class="pl-c1">null</span>, files);
+    };
+};</pre></div>
+
+<p>Jager automatically loads plugins when they follow the convention that when the module name is <code>jager-something-something</code>, it will load that plugin whenn you call it with <code>('something-something')</code>. You can also just pass the function you normally return in your plugin directly to Jager:</p>
+
+<div class="highlight highlight-source-js"><pre>jager.create()
+    (<span class="pl-k">function</span>(<span class="pl-smi">files</span>, <span class="pl-smi">cb</span>) {
+        cb(<span class="pl-c1">null</span>, files);
+    });</pre></div>
+
+<h2>
+<a id="jagerfile" class="anchor" href="#jagerfile" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>jager.File</code>
+</h2>
+
+<ul>
+<li>
+<code>filename()</code>: Return the filename for the file</li>
+<li>
+<code>contents([string])</code>: When an argument is given, the contents are updated. Returns the contents</li>
+<li>
+<code>buffer([buffer]))</code>: When an argument is given, the internal buffer is updated. Return the internal buffer</li>
+<li>
+<code>stat([stat])</code>: When an argument is given, the stat is updated. Return the stat</li>
+<li>
+<code>rename(filename)</code>: Rename the file, the stat is updated to now</li>
+</ul>
+
+<p>You can use both <code>contents()</code> and <code>buffer()</code> mixed, they will be converted on the fly when needed.</p>
+
+<h2>
+<a id="built-in-plugins" class="anchor" href="#built-in-plugins" aria-hidden="true"><span class="octicon octicon-link"></span></a>Built-in plugins</h2>
+
+<p>Jager has some builtin plugins to get you started:</p>
+
+<ul>
+<li><a href="#src-add-source-files"><code>src</code>: Add source files</a></li>
+<li><a href="#dest-write-files"><code>dest</code>: Write files</a></li>
+<li><a href="#browserify-process-a-file-with-browserify"><code>browserify</code>: Process a file with browserify</a></li>
+<li><a href="#newer-filter-old-files-out-of-the-chain"><code>newer</code>: Filter old files out of the chain</a></li>
+<li><a href="#uglify-uglify-javascript"><code>uglify</code>: Uglify javascript</a></li>
+<li><a href="#concat-combine-source-files"><code>concat</code>: Combine source files</a></li>
+<li><a href="#rename-rename-a-file"><code>rename</code>: Rename a file</a></li>
+<li><a href="#less-process-less-files"><code>less</code>: Process less files</a></li>
+<li><a href="#autoprefixer-add-vendor-prefixes-to-css"><code>autoprefixer</code>: Add vendor prefixes to css</a></li>
+<li><a href="#angular-templates-create-cache-file-for-all-angular-templates"><code>angular-templates</code>: Create cache file for all angular templates</a></li>
+<li><a href="#ngmin-create-a-version-of-angular-js-file-that-is-uglify-save"><code>ngmin</code>: Create a version of angular-js-file that is uglify save</a></li>
+<li><a href="#bower-src-add-files-from-your-bower-config"><code>bower-src</code>: Add files from your bower config</a></li>
+<li><a href="#babel-transform-es6-to-es5-javascript"><code>babel</code>: Transform ES6 to ES5 javascript</a></li>
+<li><a href="#livereload-reloads-your-browser-when-files-change"><code>livereload</code>: Reloads your browser when files change</a></li>
+<li><a href="#imagemin-minify-images-seamlessly"><code>imagemin</code>: Minify images seamlessly</a></li>
+<li><a href="#postcss-transforming-css-with-js-plugins"><code>postcss</code>: Transforming CSS with JS plugins</a></li>
+<li><a href="#extract-sourcemap-extract-sourcemaps-into-separate-files"><code>extract-sourcemap</code>: Extract sourcemaps into separate files</a></li>
+<li><a href="#modernizr-create-on-the-fly-modernizr-builds"><code>modernizr</code>: Create on the fly modernizr builds</a></li>
+<li><a href="#clean-css-library-for-minifying-css-files"><code>clean-css</code>: Library for minifying CSS files</a></li>
+</ul>
+
+<h3>
+<a id="src-add-source-files" class="anchor" href="#src-add-source-files" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>src</code>: Add source files</h3>
+
+<p>Add files to the chain used for processing</p>
+
+<p><strong>API</strong>: <code>('src', pattern[, options])</code></p>
+
+<ul>
+<li>
+<code>pattern</code>: a glob to find files</li>
+<li>
+<code>options</code>:
+
+<ul>
+<li>
+<code>dependencies</code>: a glob to describe dependencies of this source, is used to trigger the rerun when a file is changed (default: <code>null</code>)</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="dest-write-files" class="anchor" href="#dest-write-files" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>dest</code>: Write files</h3>
+
+<p>Write files in the chain to a given destination. By default only files with a newer <code>mtime</code> are written.</p>
+
+<p><strong>API</strong>: <code>('dest', dir[, options])</code></p>
+
+<ul>
+<li>
+<code>dir</code>: the directory to which the files in the chain are written, if the directory does not exist, it's created</li>
+<li>
+<code>options</code>:
+
+<ul>
+<li>
+<code>checkContents</code>: Check for the contents of the new file location, if the contents is the same, the file is not written (default: <code>false</code>)</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="browserify-process-a-file-with-browserify" class="anchor" href="#browserify-process-a-file-with-browserify" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>browserify</code>: Process a file with browserify</h3>
+
+<p>Browserify lets you <code>require('modules')</code> in the browser by bundling up all of your dependencies. When watch mode is active <code>watchify</code> is used to produces faster builds.</p>
+
+<p><strong>API</strong>: <code>('browserify'[, options])</code></p>
+
+<ul>
+<li>
+<code>options</code>:
+
+<ul>
+<li>See the <a href="https://github.com/substack/node-browserify#var-b--browserifyfiles-or-opts">browserify options</a> for details</li>
+<li>Extra options:
+
+<ul>
+<li>
+<code>babel</code>: When set the babel transform is used, see <a href="http://babeljs.io/docs/usage/options/">babel options</a> for more options</li>
+<li>
+<code>sourceMap</code>: These options are in line with the options used in the <a href="currently%20only%20%60sourceMapBasepath%60%20is%20supported">less options</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="newer-filter-old-files-out-of-the-chain" class="anchor" href="#newer-filter-old-files-out-of-the-chain" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>newer</code>: Filter old files out of the chain</h3>
+
+<p><strong>API</strong>: <code>('newer', target[, options])</code></p>
+
+<ul>
+<li>
+<code>target</code>: The target to which you want to compare the files in the chain</li>
+<li>
+<code>options</code>:
+
+<ul>
+<li>
+<code>basePath</code>: Common base path between target and source files (default: <code>cwd</code>)</li>
+<li>
+<code>checkContents</code>: Check for the contents of the new file location, if the contents is the same, the file is filteredwritten (default: <code>false</code>)</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="uglify-uglify-javascript" class="anchor" href="#uglify-uglify-javascript" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>uglify</code>: Uglify javascript</h3>
+
+<p>Compress javascript files</p>
+
+<p><strong>API</strong>: <code>('uglify')</code></p>
+
+<h3>
+<a id="concat-combine-source-files" class="anchor" href="#concat-combine-source-files" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>concat</code>: Combine source files</h3>
+
+<p>Combine all files in the chain into a new file</p>
+
+<p><strong>API</strong>: <code>('concat', filename)</code></p>
+
+<ul>
+<li>
+<code>filename</code>: The filename for the new file</li>
+</ul>
+
+<h3>
+<a id="rename-rename-a-file" class="anchor" href="#rename-rename-a-file" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>rename</code>: Rename a file</h3>
+
+<p>Rename the first file in the chain, if it doesn't exist, an empty file is added to the chain</p>
+
+<p><strong>API</strong>: <code>('rename', filename)</code></p>
+
+<ul>
+<li>
+<code>filename</code>: the new filename. The following replacements will be done in the filename:
+
+<ul>
+<li>
+<code>[timestamp]</code>: the current timestamp is included</li>
+<li>
+<code>[hash]</code>: the md5 checksum of the contents is included</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="less-process-less-files" class="anchor" href="#less-process-less-files" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>less</code>: Process less files</h3>
+
+<p>Process less file into css files</p>
+
+<p><strong>API</strong>: <code>('less'[, options])</code></p>
+
+<ul>
+<li>
+<code>options</code>: See <a href="http://lesscss.org/usage/#programmatic-usage">less options</a> for all the available options</li>
+</ul>
+
+<h3>
+<a id="autoprefixer-add-vendor-prefixes-to-css" class="anchor" href="#autoprefixer-add-vendor-prefixes-to-css" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>autoprefixer</code>: Add vendor prefixes to css</h3>
+
+<p>Plugin to parse CSS and add vendor prefixes to CSS rules using values from <a href="http://caniuse.com/">Can I Use</a>. It is <a href="https://developers.google.com/web/fundamentals/tools/build/setupbuildprocess#dont-trip-up-with-vendor-prefixes">recommended</a> by Google and used in Twitter, and Taobao.</p>
+
+<p><strong>API</strong>: <code>('autoprefixer'[, browserVersions])</code></p>
+
+<ul>
+<li>
+<code>browserVersions</code>: <a href="https://github.com/postcss/autoprefixer/blob/master/README.md#browsers">List of browser you wan to support</a>
+</li>
+</ul>
+
+<h3>
+<a id="angular-templates-create-cache-file-for-all-angular-templates" class="anchor" href="#angular-templates-create-cache-file-for-all-angular-templates" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>angular-templates</code>: Create cache file for all angular templates</h3>
+
+<p>Instead of loading all template files through ajax, include this cache file to make the lookup to these template files instant</p>
+
+<p><strong>API</strong>: <code>('angular-templates'[, options])</code></p>
+
+<ul>
+<li>
+<code>options</code>:
+
+<ul>
+<li>
+<code>base</code>: Use this to cut a part from the filenames in the cache file, to make it correspond with your template definitions (default: <code>''</code>)</li>
+<li>
+<code>filename</code>: filename of the output file (default: <code>templates.js</code>)</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="ngmin-create-a-version-of-angular-js-file-that-is-uglify-save" class="anchor" href="#ngmin-create-a-version-of-angular-js-file-that-is-uglify-save" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>ngmin</code>: Create a version of angular-js-file that is uglify save</h3>
+
+<p>Create an properly annotated version of a angular file with <a href="https://github.com/btford/ngmin">ngmin</a>.</p>
+
+<p><strong>API</strong>: <code>('ngmin')</code></p>
+
+<h3>
+<a id="bower-src-add-files-from-your-bower-config" class="anchor" href="#bower-src-add-files-from-your-bower-config" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>bower-src</code>: Add files from your bower config</h3>
+
+<p>Recursively add the main files from your bower config to your chain.</p>
+
+<p><strong>API</strong>: <code>('bower', pattern)</code></p>
+
+<ul>
+<li>
+<code>pattern</code>: glob to match the wanted bower package, ex: <code>'jquery'</code> would add the main file for jquery</li>
+</ul>
+
+<h3>
+<a id="babel-transform-es6-to-es5-javascript" class="anchor" href="#babel-transform-es6-to-es5-javascript" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>babel</code>: Transform ES6 to ES5 javascript</h3>
+
+<p>Babel will turn your ES6+ code into ES5 friendly code, so you can start using it right now without waiting for browser support.</p>
+
+<p><strong>API</strong>: <code>('babel'[, options])</code></p>
+
+<ul>
+<li>
+<code>options</code>: See the <a href="http://babeljs.io/docs/usage/options/">babel options</a> for details</li>
+</ul>
+
+<h3>
+<a id="livereload-reloads-your-browser-when-files-change" class="anchor" href="#livereload-reloads-your-browser-when-files-change" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>livereload</code>: Reloads your browser when files change</h3>
+
+<p>Notify the browser of any changes in your chain, compatible with at least the <a href="https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei">Chrome plugin</a> and <a href="https://addons.mozilla.org/en-us/firefox/addon/livereload/">Firefox plugin</a>.</p>
+
+<p><strong>API</strong>: <code>('livereload'[, options])</code></p>
+
+<ul>
+<li>
+<code>options</code>:
+
+<ul>
+<li>
+<code>port</code>: port used by the livereload server (default: <code>35729</code>)</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="imagemin-minify-images-seamlessly" class="anchor" href="#imagemin-minify-images-seamlessly" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>imagemin</code>: Minify images seamlessly</h3>
+
+<p>Minifies all images (based on extension) in the chain with <a href="https://github.com/imagemin/imagemin">imagemin</a>.</p>
+
+<p><strong>API</strong>: <code>('imagemin'[, options])</code></p>
+
+<ul>
+<li>
+<code>options</code>:
+
+<ul>
+<li>
+<code>gif</code>: See <a href="https://github.com/imagemin/imagemin-gifsicle">gifsicle options</a> for more information</li>
+<li>
+<code>jpegtran</code>: See <a href="https://github.com/imagemin/imagemin-jpegtran">jpegtran options</a> for more information</li>
+<li>
+<code>optipng</code>: See <a href="https://github.com/imagemin/imagemin-optipng">optipng options</a> for more information</li>
+<li>
+<code>svgo</code>: See <a href="https://github.com/imagemin/imagemin-svgo">svgo options</a> for more information</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="postcss-transforming-css-with-js-plugins" class="anchor" href="#postcss-transforming-css-with-js-plugins" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>postcss</code>: Transforming CSS with JS plugins</h3>
+
+<p><a href="https://github.com/postcss/postcss">PostCSS</a> is a tool for transforming CSS with JS plugins. These plugins can support variables and mixins, transpile future CSS syntax, inline images, and more.</p>
+
+<p><strong>API</strong>: <code>('postcss'[, options])</code></p>
+
+<ul>
+<li>
+<code>options</code>:
+
+<ul>
+<li>
+<code>plugins</code>: Plugins used by <a href="https://github.com/postcss/postcss">PostCSS</a>, see <a href="https://github.com/postcss/postcss#usage">PostCSS plugin options</a>
+</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="extract-sourcemap-extract-sourcemaps-into-separate-files" class="anchor" href="#extract-sourcemap-extract-sourcemaps-into-separate-files" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>extract-sourcemap</code>: Extract sourcemaps into separate files</h3>
+
+<p><strong>API</strong>: <code>('extract-sourcemap')</code></p>
+
+<p>Creates a file in the same directory as the input file, with a <code>.map</code> suffix. The sourcemap in the file is replace with a comment referencing the new file.</p>
+
+<h3>
+<a id="modernizr-create-on-the-fly-modernizr-builds" class="anchor" href="#modernizr-create-on-the-fly-modernizr-builds" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>modernizr</code>: Create on the fly modernizr builds</h3>
+
+<p><strong>API</strong>: <code>('modernizr'[, options])</code></p>
+
+<ul>
+<li>
+<code>options</code>: see the <a href="https://github.com/Modernizr/Modernizr/blob/master/lib/config-all.json">modernizr options</a> for all available options</li>
+</ul>
+
+<h3>
+<a id="clean-css-library-for-minifying-css-files" class="anchor" href="#clean-css-library-for-minifying-css-files" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>clean-css</code>: Library for minifying CSS files</h3>
+
+<p>Clean-css is a fast and efficient Node.js library for minifying CSS files. According to <a href="http://goalsmashers.github.io/css-minification-benchmark/">tests</a> it is one of the best available.</p>
+
+<p><strong>API</strong>: <code>('clean-css'[, options])</code></p>
+
+<ul>
+<li>
+<code>options</code>: see the <a href="https://github.com/jakubpawlowicz/clean-css">clean-css options</a> for all available options</li>
+</ul>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/jagerjs/jager/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/jagerjs/jager/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/jagerjs/jager"></a> is maintained by <a href="https://github.com/jagerjs">jagerjs</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
