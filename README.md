@@ -113,6 +113,7 @@ Jager has some builtin plugins to get you started:
 - [`postcss`: Transforming CSS with JS plugins](#postcss-transforming-css-with-js-plugins)
 - [`extract-sourcemap`: Extract sourcemaps into separate files](#extract-sourcemap-extract-sourcemaps-into-separate-files)
 - [`modernizr`: Create on the fly modernizr builds](#modernizr-create-on-the-fly-modernizr-builds)
+- [`clean-css`: Library for minifying CSS files](#clean-css-library-for-minifying-css-files)
 
 ### `src`: Add source files
 
@@ -297,3 +298,14 @@ Creates a file in the same directory as the input file, with a `.map` suffix. Th
 - `options`: see the [modernizr options] for all available options
 
 [modernizr options]: https://github.com/Modernizr/Modernizr/blob/master/lib/config-all.json
+
+### `clean-css`: Library for minifying CSS files
+
+Clean-css is a fast and efficient Node.js library for minifying CSS files. According to [tests] it is one of the best available.
+
+**API**: `('clean-css'[, options])`
+
+- `options`: see the [clean-css options] for all available options
+
+[tests]: http://goalsmashers.github.io/css-minification-benchmark/
+[clean-css options]: https://github.com/jakubpawlowicz/clean-css
