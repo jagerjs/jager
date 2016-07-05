@@ -26,7 +26,7 @@
 
 		"trycatch": "1.5.21",
 
-		"tiny-lr": "~0.1.4",
+		"tiny-lr": "0.2.1",
 		"browserify": "~11.0.1",
 		"mold-source-map": "~0.4.0",
 		"watchify": "~3.3.1",
