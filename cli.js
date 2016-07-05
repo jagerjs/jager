@@ -15,10 +15,8 @@ var cli = new Liftoff({
 cli.launch({}, function(env) {
 	require(env.configPath);
 
-	process.nextTick(function() {
-		var tasks = argv._.length ? argv._ : ['default'];
-		var jager = require(env.modulePath);
+	var tasks = argv._.length ? argv._ : ['default'];
+	var jager = require(env.modulePath);
 
-		jager.run(tasks, argv.debug === true);
-	});
+	jager.run(tasks, argv.debug === true);
 });
