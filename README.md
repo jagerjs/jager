@@ -107,7 +107,6 @@ Jager has some builtin plugins to get you started:
 - [`angular-templates`: Create cache file for all angular templates](#angular-templates-create-cache-file-for-all-angular-templates)
 - [`ngmin`: Create a version of angular-js-file that is uglify save](#ngmin-create-a-version-of-angular-js-file-that-is-uglify-save)
 - [`bower-src`: Add files from your bower config](#bower-src-add-files-from-your-bower-config)
-- [`babel`: Transform ES6 to ES5 javascript](#babel-transform-es6-to-es5-javascript)
 - [`livereload`: Reloads your browser when files change](#livereload-reloads-your-browser-when-files-change)
 - [`imagemin`: Minify images seamlessly](#imagemin-minify-images-seamlessly)
 - [`postcss`: Transforming CSS with JS plugins](#postcss-transforming-css-with-js-plugins)
@@ -144,7 +143,7 @@ Browserify lets you `require('modules')` in the browser by bundling up all of yo
 - `options`:
 	- See the [browserify options] for details
 	- Extra options:
-		- `babel`: When set the babel transform is used, see [babel options] for more options
+		- `babel`: When set the babel transform is used, see [babel options] for more options, when `true` is supplied the `es2015` and `react` preset are used.
 		- `sourceMap`: These options are in line with the options used in the [less options] (currently only `sourceMapBasepath` is supported)
 
 [browserify options]: https://github.com/substack/node-browserify#var-b--browserifyfiles-or-opts
@@ -232,16 +231,6 @@ Recursively add the main files from your bower config to your chain.
 **API**: `('bower', pattern)`
 
 - `pattern`: glob to match the wanted bower package, ex: `'jquery'` would add the main file for jquery
-
-### `babel`: Transform ES6 to ES5 javascript
-
-Babel will turn your ES6+ code into ES5 friendly code, so you can start using it right now without waiting for browser support.
-
-**API**: `('babel'[, options])`
-
-- `options`: See the [babel options] for details
-
-[babel options]: http://babeljs.io/docs/usage/options/
 
 ### `livereload`: Reloads your browser when files change
 

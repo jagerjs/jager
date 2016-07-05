@@ -10,13 +10,16 @@ var babelify = require('babelify');
 var mold = require('mold-source-map');
 var extend = require('util')._extend;
 
+var babelPresetEs2015 = require('babel-preset-es2015');
+var babelPresetReact = require('babel-preset-react');
+
 var __root = process.cwd();
 
 var _instanceCache = {};
 
 function getBabelTransform(options) {
 	var babelOptions = {
-		blacklist: ['useStrict'],
+		presets: [babelPresetEs2015, babelPresetReact],
 	};
 
 	if (typeof options === 'object') {
