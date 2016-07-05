@@ -14,7 +14,7 @@
 		"build"
 	],
 	"dependencies": {
-		"lodash": "~2.4.1",
+		"lodash": "4.13.1",
 		"liftoff": "~0.11.3",
 		"async": "~0.9.0",
 		"chalk": "~0.4.0",
