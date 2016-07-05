@@ -35,7 +35,13 @@
 		"babel-preset-react": "6.11.1",
 		"uglify-js": "2.7.0",
 		"ng-annotate": "1.2.1",
-		"imagemin": "~3.1.0",
+
+		"imagemin": "5.2.2",
+		"imagemin-gifsicle": "5.1.0",
+		"imagemin-jpegtran": "5.0.2",
+		"imagemin-optipng": "5.1.0",
+		"imagemin-svgo": "5.1.0",
+
 		"modernizr": "~3.1.0",
 		"mkdirp": "~0.5.0",
 		"less": "~2.5.0",

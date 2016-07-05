@@ -1,7 +1,12 @@
 
 'use strict';
 
-var Imagemin = require('imagemin');
+var imagemin = require('imagemin');
+var imageminGifsicle = require('imagemin-gifsicle');
+var imageminJpegtran = require('imagemin-jpegtran');
+var imageminOptipng = require('imagemin-optipng');
+var imageminSvgo = require('imagemin-svgo');
+
 var minimatch = require('minimatch');
 var async = require('async');
 
@@ -16,19 +21,22 @@ function process(options, file, cb) {
 }
 
 function minifyImage(options, file, cb) {
-	new Imagemin()
-		.src(file.buffer())
-		.use(Imagemin.gifsicle(options.gif))
-		.use(Imagemin.jpegtran(options.jpeg))
-		.use(Imagemin.optipng(options.png))
-		.use(Imagemin.svgo(options.svg))
-		.run(function(err, files) {
-			if (err) {
-				cb(err);
-			} else {
-				file.buffer(files[0].contents);
-				cb(null, file);
-			}
+	var imageminOptions = {
+		use: [
+			imageminGifsicle(options.gif),
+			imageminJpegtran(options.jpeg),
+			imageminOptipng(options.png),
+			imageminSvgo(options.svg),
+		],
+	};
+
+	imagemin.buffer(file.buffer(), imageminOptions)
+		.then(function(data) {
+			file.buffer(data);
+			cb(null, file);
+		})
+		.catch(function(err) {
+			cb(err);
 		});
 }
 
