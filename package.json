@@ -21,7 +21,7 @@
 		"minimist": "1.2.0",
 		"pretty-hrtime": "1.0.2",
 		"chokidar": "1.6.0",
-		"growl": "~1.8.1",
+		"growl": "1.9.2",
 		"minimatch": "~1.0.0",
 
 		"trycatch": "~1.5.11",
