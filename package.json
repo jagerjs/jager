@@ -49,7 +49,7 @@
 		"clean-css": "3.4.18",
 		"globule": "1.0.0",
 		"autoprefixer": "6.3.6",
-		"js-string-escape": "~1.0.0"
+		"js-string-escape": "1.0.1"
 	},
 	"devDependencies": {
 		"jshint-stylish": "~0.4.0"
