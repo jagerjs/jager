@@ -44,7 +44,7 @@
 
 		"modernizr": "3.3.1",
 		"mkdirp": "0.5.1",
-		"less": "~2.5.0",
+		"less": "2.7.1",
 		"postcss": "~5.0.9",
 		"clean-css": "~3.4.5",
 		"globule": "~0.2.0",
