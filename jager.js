@@ -68,7 +68,9 @@ module.exports = {
 			Logger.error('Duplicate task name: ' + name);
 		}
 	},
-	run: function(tasklist) {
+	run: function(tasklist, debug) {
+		Logger.setDebug(debug);
+
 		tasklist.forEach(function(task) {
 			if (tasks[task]) {
 				tasks[task].run();

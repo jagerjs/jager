@@ -19,6 +19,6 @@ cli.launch({}, function(env) {
 		var tasks = argv._.length ? argv._ : ['default'];
 		var jager = require(env.modulePath);
 
-		jager.run(tasks);
+		jager.run(tasks, argv.debug === true);
 	});
 });
