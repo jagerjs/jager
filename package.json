@@ -22,7 +22,7 @@
 		"pretty-hrtime": "1.0.2",
 		"chokidar": "1.6.0",
 		"growl": "1.9.2",
-		"minimatch": "~1.0.0",
+		"minimatch": "3.0.2",
 
 		"trycatch": "~1.5.11",
 
