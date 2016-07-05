@@ -105,7 +105,7 @@ Jager has some builtin plugins to get you started:
 - [`less`: Process less files](#less-process-less-files)
 - [`autoprefixer`: Add vendor prefixes to css](#autoprefixer-add-vendor-prefixes-to-css)
 - [`angular-templates`: Create cache file for all angular templates](#angular-templates-create-cache-file-for-all-angular-templates)
-- [`ngmin`: Create a version of angular-js-file that is uglify save](#ngmin-create-a-version-of-angular-js-file-that-is-uglify-save)
+- [`ng-annotate`: Create a version of angular-js-file that is uglify save](#ng-annotate-create-a-version-of-angular-js-file-that-is-uglify-save)
 - [`bower-src`: Add files from your bower config](#bower-src-add-files-from-your-bower-config)
 - [`livereload`: Reloads your browser when files change](#livereload-reloads-your-browser-when-files-change)
 - [`imagemin`: Minify images seamlessly](#imagemin-minify-images-seamlessly)
@@ -216,13 +216,13 @@ Instead of loading all template files through ajax, include this cache file to m
 	- `base`: Use this to cut a part from the filenames in the cache file, to make it correspond with your template definitions (default: `''`)
 	- `filename`: filename of the output file (default: `templates.js`)
 
-### `ngmin`: Create a version of angular-js-file that is uglify save
+### `ng-annotate`: Create a version of angular-js-file that is uglify save
 
-Create an properly annotated version of a angular file with [ngmin].
+Create an properly annotated version of a angular file with [ng-annotate].
 
-**API**: `('ngmin')`
+**API**: `('ng-annotate')`
 
-[ngmin]: https://github.com/btford/ngmin
+[ng-annotate]: https://github.com/olov/ng-annotate
 
 ### `bower-src`: Add files from your bower config
 
