@@ -48,7 +48,7 @@
 		"postcss": "5.0.21",
 		"clean-css": "3.4.18",
 		"globule": "1.0.0",
-		"autoprefixer": "~6.0.3",
+		"autoprefixer": "6.3.6",
 		"js-string-escape": "~1.0.0"
 	},
 	"devDependencies": {
