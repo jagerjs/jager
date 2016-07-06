@@ -7,6 +7,7 @@ var _ = require('lodash');
 var Chackle = require('./lib/Chackle');
 var Plugin = require('./lib/Plugin');
 var Task = require('./lib/Task');
+var Preset = require('./lib/Preset');
 var File = require('./lib/File');
 
 var Logger = require('./lib/Logger');
@@ -48,6 +49,14 @@ module.exports = {
 		}
 
 		return chackleBuilder;
+	},
+	preset: function preset(name, options) {
+		try {
+			Preset.load(name, options);
+		} catch (e) {
+			Logger.error('Could not load preset: ' + name);
+			Logger.error(e);
+		}
 	},
 	task: function task(/* name, [options,] chain[, chain[, chain ...]] */) {
 		var args = Array.prototype.slice.call(arguments);
