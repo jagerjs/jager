@@ -1,4 +1,14 @@
 
+/**
+ * Add files from your bower config
+ *
+ * Recursively add the main files from your bower config to your chain.
+ *
+ * **API**: `('bower', pattern)`
+ *
+ * - `pattern`: glob to match the wanted bower package, ex: `'jquery'` would add the main file for jquery
+ */
+
 // TODO dependencies of dependencies...
 
 'use strict';

@@ -1,4 +1,18 @@
 
+/**
+ * Reloads your browser when files change
+ *
+ * Notify the browser of any changes in your chain, compatible with at least the [Chrome plugin] and [Firefox plugin].
+ *
+ * **API**: `('livereload'[, options])`
+ *
+ * - `options`:
+ *     - `port`: port used by the livereload server (default: `35729`)
+ *
+ * [Chrome plugin]: https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei
+ * [Firefox plugin]: https://addons.mozilla.org/en-us/firefox/addon/livereload/
+ */
+
 'use strict';
 
 var tinylr = require('tiny-lr');

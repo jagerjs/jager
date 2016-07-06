@@ -1,4 +1,16 @@
 
+/**
+ * Create cache file for all angular templates
+ *
+ * Instead of loading all template files through ajax, include this cache file to make the lookup to these template files instant
+ *
+ * **API**: `('angular-templates'[, options])`
+ *
+ * - `options`:
+ *    - `base`: Use this to cut a part from the filenames in the cache file, to make it correspond with your template definitions (default: `''`)
+ *    - `filename`: filename of the output file (default: `templates.js`)
+ */
+
 'use strict';
 
 var path = require('path');

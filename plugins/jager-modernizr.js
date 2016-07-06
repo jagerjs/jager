@@ -1,4 +1,14 @@
 
+/**
+ * Create on the fly modernizr builds
+ *
+ * **API**: `('modernizr'[, options])`
+ *
+ * - `options`: see the [modernizr options] for all available options
+ *
+ * [modernizr options]: https://github.com/Modernizr/Modernizr/blob/master/lib/config-all.json
+ */
+
 'use strict';
 
 var modernizr = require('modernizr');

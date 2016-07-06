@@ -1,4 +1,15 @@
 
+/**
+ * Filter old files out of the chain
+ *
+ * **API**: `('newer', target[, options])`
+ *
+ * - `target`: The target to which you want to compare the files in the chain
+ * - `options`:
+ * 	- `basePath`: Common base path between target and source files (default: `cwd`)
+ * 	- `checkContents`: Check for the contents of the new file location, if the contents is the same, the file is filteredwritten (default: `false`)
+ */
+
 'use strict';
 
 var path = require('path');

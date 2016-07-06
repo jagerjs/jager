@@ -1,4 +1,16 @@
 
+/**
+ * Process less files
+ *
+ * Process less file into css files
+ *
+ * **API**: `('less'[, options])`
+ *
+ * - `options`: See [less options] for all the available options
+ *
+ * [less options]: http://lesscss.org/usage/#programmatic-usage
+ */
+
 'use strict';
 
 var path = require('path');

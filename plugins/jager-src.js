@@ -1,4 +1,16 @@
 
+/*!
+ * Add source files
+ *
+ * Add files to the chain used for processing
+ *
+ * **API**: `('src', pattern[, options])`
+ *
+ * - `pattern`: a glob to find files
+ * - `options`:
+ *     - `dependencies`: a glob to describe dependencies of this source, is used to trigger the rerun when a file is changed (default: `null`)
+ */
+
 'use strict';
 
 var globule = require('globule');

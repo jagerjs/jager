@@ -1,4 +1,12 @@
 
+/**
+ * Extract sourcemaps into separate files
+ *
+ * **API**: `('extract-sourcemap')`
+ *
+ * Creates a file in the same directory as the input file, with a `.map` suffix. The sourcemap in the file is replace with a comment referencing the new file.
+ */
+
 'use strict';
 
 var path = require('path');

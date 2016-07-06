@@ -1,4 +1,16 @@
 
+/**
+ * Rename a file
+ *
+ * Rename the first file in the chain, if it doesn't exist, an empty file is added to the chain
+ *
+ * **API**: `('rename', filename)`
+ *
+ * - `filename`: the new filename. The following replacements will be done in the filename:
+ *     - `[timestamp]`: the current timestamp is included
+ *     - `[hash]`: the md5 checksum of the contents is included
+ */
+
 'use strict';
 
 var path = require('path');

@@ -1,4 +1,17 @@
 
+/**
+ *
+ * Write files
+ *
+ * Write files in the chain to a given destination. By default only files with a newer `mtime` are written.
+ *
+ * **API**: `('dest', dir[, options])`
+ *
+ * - `dir`: the directory to which the files in the chain are written, if the directory does not exist, it's created
+ * - `options`:
+ * 	- `checkContents`: Check for the contents of the new file location, if the contents is the same, the file is not written (default: `false`)
+ */
+
 'use strict';
 
 var path = require('path');

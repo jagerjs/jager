@@ -1,4 +1,14 @@
 
+/**
+ * Combine source files
+ *
+ * Combine all files in the chain into a new file
+ *
+ * **API**: `('concat', filename)`
+ *
+ * - `filename`: The filename for the new file
+ */
+
 'use strict';
 
 var path = require('path');

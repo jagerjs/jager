@@ -1,4 +1,24 @@
 
+/**
+ * Minify images seamlessly
+ *
+ * Minifies all images (based on extension) in the chain with [imagemin].
+ *
+ * **API**: `('imagemin'[, options])`
+ *
+ * - `options`:
+ * 	- `gifsicle`: See [gifsicle options] for more information
+ * 	- `jpegtran`: See [jpegtran options] for more information
+ * 	- `optipng`: See [optipng options] for more information
+ * 	- `svgo`: See [svgo options] for more information
+ *
+ * [imagemin]: https://github.com/imagemin/imagemin
+ * [gifsicle options]: https://github.com/imagemin/imagemin-gifsicle
+ * [jpegtran options]: https://github.com/imagemin/imagemin-jpegtran
+ * [optipng options]: https://github.com/imagemin/imagemin-optipng
+ * [svgo options]: https://github.com/imagemin/imagemin-svgo
+ */
+
 'use strict';
 
 var imagemin = require('imagemin');
@@ -23,10 +43,10 @@ function process(options, file, cb) {
 function minifyImage(options, file, cb) {
 	var imageminOptions = {
 		use: [
-			imageminGifsicle(options.gif),
-			imageminJpegtran(options.jpeg),
-			imageminOptipng(options.png),
-			imageminSvgo(options.svg),
+			imageminGifsicle(options.gifsicle),
+			imageminJpegtran(options.jpegtran),
+			imageminOptipng(options.optipng),
+			imageminSvgo(options.svgo),
 		],
 	};
 

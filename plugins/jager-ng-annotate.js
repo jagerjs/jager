@@ -1,4 +1,14 @@
 
+/**
+ * Create a version of angular-js-file that is uglify save
+ *
+ * Create an properly annotated version of a angular file with [ng-annotate].
+ *
+ * **API**: `('ng-annotate')`
+ *
+ * [ng-annotate]: https://github.com/olov/ng-annotate
+ */
+
 'use strict';
 
 var ngAnnotate = require('ng-annotate');

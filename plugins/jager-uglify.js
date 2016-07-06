@@ -1,4 +1,12 @@
 
+/**
+ * Uglify javascript
+ *
+ * Compress javascript files
+ *
+ * **API**: `('uglify')`
+ */
+
 'use strict';
 
 var async = require('async');

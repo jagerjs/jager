@@ -1,4 +1,22 @@
 
+/**
+ * Process a file with browserify
+ *
+ * Browserify lets you `require('modules')` in the browser by bundling up all of your dependencies. When watch mode is active `watchify` is used to produces faster builds.
+ *
+ * **API**: `('browserify'[, options])`
+ *
+ * - `options`:
+ * 	- See the [browserify options] for details
+ * 	- Extra options:
+ * 		- `babel`: When set the babel transform is used, see [babel options] for more options, when `true` is supplied the `es2015` and `react` preset are used.
+ * 		- `sourceMap`: These options are in line with the options used in the [less options] (currently only `sourceMapBasepath` is supported)
+ *
+ * [browserify options]: https://github.com/substack/node-browserify#var-b--browserifyfiles-or-opts
+ * [babel options]: http://babeljs.io/docs/usage/options/
+ * [less options]: http://lesscss.org/usage/#programmatic-usage
+ */
+
 'use strict';
 
 var path = require('path');
