@@ -2,7 +2,20 @@
 
 'use strict';
 var Liftoff = require('liftoff');
-var argv = require('subarg')(process.argv.slice(2));
+var subarg = require('subarg');
+
+// applies only to top level command
+var argOptions = {
+	'boolean': [ 'watch' ],
+	alias: {
+		w: [ 'watch' ],
+	},
+	'default': {
+		watch: false,
+	},
+};
+
+var argv = subarg(process.argv.slice(2), argOptions);
 
 var cli = new Liftoff({
 	name: 'jager',
@@ -13,10 +26,35 @@ var cli = new Liftoff({
 });
 
 cli.launch({}, function(env) {
-	require(env.configPath);
-
-	var tasks = argv._.length ? argv._ : ['default'];
 	var jager = require(env.modulePath);
+	var tasks = [];
+
+	if (env.configPath) {
+		require(env.configPath);
+
+		tasks = argv._.length ? argv._ : ['default'];
+	} else if (argv.preset) {
+		var presets = Array.isArray(argv.preset) ? argv.preset : [argv.preset];
+
+		presets.forEach(function(preset) {
+			var name = preset.name ? preset.name : preset._.shift();
+			delete preset.name;
+
+			var options = preset._.shift();
+			delete options._;
+
+			var watch = (!!preset.watch) || argv.watch;
+			delete preset.watch;
+
+			jager.preset(name, options);
+
+			if (watch) {
+				tasks.push(name + ':watch');
+			} else {
+				tasks.push(name);
+			}
+		});
+	}
 
 	jager.run(tasks, argv.debug === true);
 });
