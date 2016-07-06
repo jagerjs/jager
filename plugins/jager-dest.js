@@ -10,7 +10,7 @@ var async = require('async');
 var newer = require('./jager-newer');
 
 function writeFile(pathname, file, cb) {
-	fs.writeFile(pathname, file.buffer(), function(err, rs) {
+	fs.writeFile(pathname, file.buffer(), function(err) {
 		if (err) {
 			cb(err);
 		} else {
@@ -36,7 +36,9 @@ module.exports = function(target, options) {
 	return function dest(files, cb) {
 		async.map(files, function(file, cb) {
 			newerInstance.single(file, function(err, result) {
-				if (result.newer) {
+				if (err) {
+					cb(err);
+				} else if (result.newer) {
 					file.rename(result.to);
 					file.stat(result.stat);
 

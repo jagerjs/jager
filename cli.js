@@ -8,8 +8,8 @@ var cli = new Liftoff({
 	name: 'jager',
 	configName: 'jagerfile',
 	extensions: {
-		'.js': null
-	}
+		'.js': null,
+	},
 });
 
 cli.launch({}, function(env) {

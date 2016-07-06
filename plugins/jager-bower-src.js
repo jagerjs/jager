@@ -6,7 +6,6 @@
 var path = require('path');
 var fs = require('fs');
 
-var globule = require('globule');
 var minimatch = require('minimatch');
 var async = require('async');
 
@@ -51,7 +50,7 @@ function loadBowerDirectory(base, cb) {
 					cb(null, defaultBowerDirectory);
 				}
 			} catch (e) {
-				return cb(e);
+				cb(e);
 			}
 		}
 	});
@@ -78,7 +77,7 @@ function createAdd(bowerJson) {
 							async.map(filenames, jager.File.create, function(err, newFiles) {
 								cb(err, {
 									filenames: filenames,
-									newFiles: newFiles
+									newFiles: newFiles,
 								});
 							});
 						}
@@ -107,15 +106,17 @@ module.exports = function(name) {
 				add = createAdd(bowerJson);
 
 				async.map(matchingDependencyNames, add, function(err, results) {
+					var newFiles;
+
 					if (err) {
 						cb(err);
 					} else {
 						results.forEach(function(result) {
 							that.addSource(result.filenames);
-							files = files.concat(result.newFiles);
+							newFiles = files.concat(result.newFiles);
 						});
 
-						cb(null, files);
+						cb(null, newFiles);
 					}
 				});
 			}

@@ -15,8 +15,8 @@ function process(options, file, cb) {
 	});
 }
 
-module.exports = function(options) {
-	options = options || {};
+module.exports = function(rawOptions) {
+	var options = rawOptions || {};
 
 	return function(files, cb) {
 		async.map(files, process.bind(null, options), cb);

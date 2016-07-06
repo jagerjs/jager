@@ -23,8 +23,12 @@ module.exports = function(options) {
 	}
 
 	return function angularTemplates(files, cb) {
-		async.map(files, process, function(err, files) {
-			cb(null, [new jager.File(path.join(__root, base, filename), new Buffer(prefix + files.join('') + suffix))]);
+		async.map(files, process, function(err, newFiles) {
+			if (err) {
+				cb(err);
+			} else {
+				cb(null, [new jager.File(path.join(__root, base, filename), new Buffer(prefix + newFiles.join('') + suffix))]);
+			}
 		});
 	};
 };

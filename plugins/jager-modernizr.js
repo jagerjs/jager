@@ -13,8 +13,8 @@ function generateBuild(options, cb) {
 	});
 }
 
-module.exports = function(options) {
-	options = options || {};
+module.exports = function(rawOptions) {
+	var options = rawOptions || {};
 
 	return function modernizr(files, cb) {
 		generateBuild(options, function(file) {

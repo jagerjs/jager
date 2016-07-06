@@ -29,16 +29,16 @@ function notify(livereloadServer, files, cb) {
 	if (filesToNotify.length) {
 		livereloadServer.changed({
 			body: {
-				files: filesToNotify
-			}
+				files: filesToNotify,
+			},
 		});
 	}
 
 	cb(null, files);
 }
 
-module.exports = function(options) {
-	options = options || {};
+module.exports = function(rawOptions) {
+	var options = rawOptions || {};
 	var port = parseInt(options.port || defaultPort, 10);
 
 	if (!servers[port]) {

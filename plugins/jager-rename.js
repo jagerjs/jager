@@ -4,12 +4,14 @@
 var path = require('path');
 var crypto = require('crypto');
 
+var each = require('lodash/each');
+
 var jager = require('./../jager');
 
 var __root = process.cwd();
 
 var replacers = {
-	timestamp: function(file) {
+	timestamp: function() {
 		return Date.now();
 	},
 	hash: function(file) {
@@ -20,9 +22,9 @@ var replacers = {
 function formatFilename(filename, file) {
 	var formattedFilename = filename;
 
-	for (var key in replacers) {
-		formattedFilename = formattedFilename.replace('[' + key + ']', replacers[key].bind(null, file));
-	}
+	each(replacers, function(replacer, key) {
+		formattedFilename = formattedFilename.replace('[' + key + ']', replacer.bind(null, file));
+	});
 
 	return formattedFilename;
 }

@@ -10,7 +10,7 @@ module.exports = function(browserVersions) {
 		cb(null, file);
 	}
 
-	return function autoprefixer(files, cb) {
+	return function(files, cb) {
 		async.map(files, prefix, cb);
 	};
 };

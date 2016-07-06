@@ -11,7 +11,7 @@ var jager = require('./../jager');
 
 function createStream(file) {
 	var inputStream = new stream.Readable();
-	inputStream._read = function(){};
+	inputStream._read = function() {};
 	inputStream.push(file.contents());
 	inputStream.push(null);
 

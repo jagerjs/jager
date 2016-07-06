@@ -52,14 +52,17 @@
 		"js-string-escape": "1.0.1"
 	},
 	"devDependencies": {
-		"jshint-stylish": "~0.4.0"
+		"eslint": "3.0.0",
+		"eslint-config-airbnb-es5": "1.0.9",
+		"babel-eslint": "6.1.0",
+		"eslint-plugin-react": "5.2.2"
 	},
 	"main": "jager.js",
 	"bin": {
 		"jager": "./cli.js"
 	},
 	"scripts": {
-		"lint": "jshint lib plugins cli.js jager.js --reporter node_modules/jshint-stylish/stylish.js --exclude node_modules"
+		"lint": "eslint ."
 	},
 	"engine-strict": true,
 	"engines": {

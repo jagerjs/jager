@@ -5,8 +5,22 @@ var globule = require('globule');
 var async = require('async');
 var jager = require('./../jager');
 
-module.exports = function(input, options) {
-	options = options || {};
+function srcMapper(filename, cb) {
+	jager.File.create(filename, function(err, file) {
+		if (err) {
+			if (err.code === 'EISDIR') {
+				cb(null, null);
+			} else {
+				cb(err);
+			}
+		} else {
+			cb(null, file);
+		}
+	});
+}
+
+module.exports = function(input, rawOptions) {
+	var options = rawOptions || {};
 
 	return function src(files, cb) {
 		var filenames = globule.find(Array.isArray(input) ? input : [input]);
@@ -32,18 +46,6 @@ module.exports = function(input, options) {
 			}
 		}
 
-		async.map(filenames, function(filename, cb) {
-			jager.File.create(filename, function(err, file) {
-				if (err) {
-					if (err.code === 'EISDIR') {
-						cb(null, null);
-					} else {
-						cb(err);
-					}
-				} else {
-					cb(null, file);
-				}
-			});
-		}, asyncMapCallback);
+		async.map(filenames, srcMapper, asyncMapCallback);
 	};
 };

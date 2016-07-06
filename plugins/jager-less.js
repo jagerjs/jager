@@ -37,8 +37,8 @@ function compileLess(context, options, file, cb) {
 		});
 }
 
-module.exports = function(options) {
-	options = options || {};
+module.exports = function(rawOptions) {
+	var options = rawOptions || {};
 
 	return function less(files, cb) {
 		async.map(files, compileLess.bind(null, this, options), cb);

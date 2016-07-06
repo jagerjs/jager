@@ -11,8 +11,6 @@ var File = require('./lib/File');
 
 var Logger = require('./lib/Logger');
 
-var __root = process.cwd();
-
 function getChackleBuilder() {
 	function createChackleLinker(parent) {
 		return (function(/* name [, ...] */) {
@@ -79,5 +77,5 @@ module.exports = {
 			}
 		});
 	},
-	File: File
+	File: File,
 };

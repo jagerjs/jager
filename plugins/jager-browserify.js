@@ -75,7 +75,8 @@ function processBrowserify(options, addDependency, file, cb) {
 	var bufferList = [];
 	var errorEmitted = false;
 
-	stream.on('data', function(part) {
+	stream.on('data',
+		function(part) {
 			bufferList.push(new Buffer(part));
 		})
 		.on('error', function(err) {
@@ -110,8 +111,8 @@ function processBrowserify(options, addDependency, file, cb) {
 	}
 }
 
-module.exports = function(options) {
-	options = options || {};
+module.exports = function(rawOptions) {
+	var options = rawOptions || {};
 
 	return function(files, cb) {
 		var that = this;

@@ -1,0 +1,10 @@
+{
+    "parser": "babel-eslint",
+    "extends": "eslint-config-airbnb-es5",
+    "rules": {
+        "indent": ["error", "tab"],
+		"func-names": "off",
+		"comma-dangle": ["warn", "always-multiline"],
+		"no-shadow": "off"
+	}
+}
