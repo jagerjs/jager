@@ -27,10 +27,8 @@ function single(target, basePath, checkContents, file, cb) {
 		});
 	}
 
-	fs.stat(to, function(err, stat) {
-		if (err) {
-			cb(err);
-		} else if (stat) {
+	fs.stat(to, function(err, stat) { // eslint-disable-line handle-callback-err
+		if (stat) {
 			if (checkContents) {
 				fs.readFile(to, function(err, contents) {
 					if (err || !file.buffer().equals(contents)) {
