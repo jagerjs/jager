@@ -2,7 +2,7 @@
 
 'use strict';
 var Liftoff = require('liftoff');
-var argv = require('minimist')(process.argv.slice(2));
+var argv = require('subarg')(process.argv.slice(2));
 
 var cli = new Liftoff({
 	name: 'jager',
