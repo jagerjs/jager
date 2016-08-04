@@ -2,14 +2,17 @@
 /**
  * Serve files that are currently in the chain
  *
- * Set up a server that serves all files in its chain
+ * Set up a server that serves all files in its chain. When a found
+ * can't be found a JSON manifest of all the files in the chain is
+ * served
  *
  * _Note: not for production use_
  *
  * **API**: `('server'[, options])`
  *
  * - `options`:
- *     - `port`: port used for the server
+ *     - `port`: port used for the server (defaults to 3000)
+ *     - `serveIndex`: serve the index file when if file is not found (defaults to `false`)
  */
 
 'use strict';
@@ -24,8 +27,19 @@ var __root = process.cwd();
 
 var DEFAULT_PORT = 3000;
 
-function Server(port) {
+var indexFiles = ['/index.html'];
+
+function _serve(response, file) {
+	response.writeHead(200, {
+		'Content-Length': file.file.contents().length,
+	});
+
+	response.end(file.file.contents());
+}
+
+function Server(port, serveIndex) {
 	this._files = {};
+	this._serveIndex = serveIndex;
 
 	var app = connect();
 
@@ -37,21 +51,26 @@ function Server(port) {
 Server.prototype._serveFile = function(request, response) {
 	var files = this._getListOfFiles();
 	var found = false;
+	var indexFile = null;
 
 	files.forEach(function(file) {
+		if (indexFiles.indexOf(file.url) !== -1) {
+			indexFile = file;
+		}
+
 		if (request.url === file.url) {
 			found = true;
 
-			response.writeHead(200, {
-				'Content-Length': file.file.buffer().length,
-			});
-
-			response.end(file.file.buffer());
+			_serve(response, file);
 		}
 	});
 
 	if (!found) {
-		this._serveListOfFiles(response);
+		if (this._serveIndex && indexFile) {
+			_serve(response, indexFile);
+		} else {
+			this._serveListOfFiles(response);
+		}
 	}
 };
 
@@ -96,12 +115,13 @@ var serverInstances = {};
 module.exports = function(rawOptions) {
 	var options = rawOptions || {};
 	var port = parseInt(options.port || DEFAULT_PORT, 10);
+	var serveIndex = !!options.serveIndex;
 
 	return function server(files, cb) {
 		var chainId = this.getChainId();
 
 		if (!serverInstances[port]) {
-			serverInstances[port] = new Server(port);
+			serverInstances[port] = new Server(port, serveIndex);
 		}
 
 		serverInstances[port].setFiles(chainId, files);
