@@ -30,6 +30,7 @@ var extend = require('util')._extend;
 
 var babelPresetEs2015 = require('babel-preset-es2015');
 var babelPresetReact = require('babel-preset-react');
+var babelPresetStage0 = require('babel-preset-stage-0');
 
 var __root = process.cwd();
 
@@ -37,7 +38,7 @@ var _instanceCache = {};
 
 function getBabelTransform(options) {
 	var babelOptions = {
-		presets: [babelPresetEs2015, babelPresetReact],
+		presets: [babelPresetEs2015, babelPresetReact, babelPresetStage0],
 	};
 
 	if (typeof options === 'object') {
