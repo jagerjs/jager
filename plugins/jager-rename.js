@@ -17,12 +17,22 @@ var path = require('path');
 var crypto = require('crypto');
 
 var each = require('lodash/each');
+var async = require('async');
 
 var jager = require('./../jager');
 
 var __root = process.cwd();
 
+var REPLACERS_DETECT = /\[[a-z]+\]/;
+
 var replacers = {
+	basename: function(file) {
+		var filename = file.filename();
+		return path.basename(filename, path.extname(filename));
+	},
+	extension: function(file) {
+		return path.extname(file.filename());
+	},
 	timestamp: function() {
 		return Date.now();
 	},
@@ -41,20 +51,27 @@ function formatFilename(filename, file) {
 	return formattedFilename;
 }
 
-module.exports = function(filename) {
-	return function rename(files, cb) {
-		var file;
+function renameFile(filename, file, cb) {
+	file.rename(path.join(__root, formatFilename(filename, file)));
+	cb(null, file);
+}
 
-		if (files.length === 1) {
-			file = files[0];
-		} else if (files.length === 0) {
-			file = new jager.File(path.join(__root, filename), new Buffer(''));
-		} else {
+module.exports = function(filename) {
+	var hasReplacers = REPLACERS_DETECT.test(filename);
+
+	return function rename(files, cb) {
+		var filesToBeRenamed = files;
+
+		if (files.length === 0) {
+			if (hasReplacers) {
+				throw new Error('No source found for replacers');
+			}
+
+			filesToBeRenamed = [new jager.File('foo.bar', new Buffer(''))];
+		} else if (files.length > 1 && !hasReplacers) {
 			throw new Error('More than one file is unsupported');
 		}
 
-		file.rename(path.join(__root, formatFilename(filename, file)));
-
-		cb(null, [file]);
+		async.map(filesToBeRenamed, renameFile.bind(null, filename), cb);
 	};
 };
