@@ -96,7 +96,11 @@ function processBrowserify(options, addDependency, file, cb) {
 
 	stream.on('data',
 		function(part) {
-			bufferList.push(new Buffer(part));
+			if (part instanceof Buffer) {
+				bufferList.push(part);
+			} else {
+				bufferList.push(new Buffer(part));
+			}
 		})
 		.on('error', function(err) {
 			errorEmitted = true;
