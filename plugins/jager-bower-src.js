@@ -9,8 +9,6 @@
  * - `pattern`: glob to match the wanted bower package, ex: `'jquery'` would add the main file for jquery
  */
 
-// TODO dependencies of dependencies...
-
 'use strict';
 
 var path = require('path');
@@ -18,6 +16,8 @@ var fs = require('fs');
 
 var minimatch = require('minimatch');
 var async = require('async');
+
+var find = require('lodash/find');
 
 var jager = require('./../jager');
 
@@ -86,7 +86,7 @@ function createAdd(bowerJson) {
 
 							async.map(filenames, jager.File.create, function(err, newFiles) {
 								cb(err, {
-									filenames: filenames,
+									bowerJson: dependencyBowerJson,
 									newFiles: newFiles,
 								});
 							});
@@ -98,13 +98,58 @@ function createAdd(bowerJson) {
 	};
 }
 
+function processResults(result, cb) {
+	var files = [];
+
+	if (result.bowerJson && result.bowerJson.dependencies) {
+		var dependenciesNames = Object.keys(result.bowerJson.dependencies);
+		processDependencies(result.bowerJson, dependenciesNames, function(err, rs) {
+			if (err) {
+				cb(err);
+			} else {
+				files = files.concat(rs);
+				cb(null, files);
+			}
+		});
+	} else {
+		cb(null, files);
+	}
+}
+
+function processDependencies(bowerJson, dependencies, cb) {
+	var add = createAdd(bowerJson);
+
+	async.map(dependencies, add, function(err, results) {
+		if (err) {
+			cb(err);
+		} else {
+			async.map(results, processResults, function(err, dependenciesResult) {
+				var files = [];
+
+				if (err) {
+					cb(err);
+				} else {
+					dependenciesResult.forEach(function(list) {
+						files = files.concat(list);
+					});
+
+					results.forEach(function(result) {
+						files = files.concat(result.newFiles);
+					});
+
+					cb(null, files);
+				}
+			});
+		}
+	});
+}
+
 module.exports = function(name) {
 	return function bowerSrc(files, cb) {
 		var that = this;
 
 		loadBowerJson(__root, function(err, bowerJson) {
 			var matchingDependencyNames;
-			var add;
 
 			if (err) {
 				cb(err);
@@ -113,20 +158,23 @@ module.exports = function(name) {
 			} else {
 				matchingDependencyNames = Object.keys(bowerJson.dependencies)
 					.filter(function(dep) { return minimatch(dep, name); });
-				add = createAdd(bowerJson);
 
-				async.map(matchingDependencyNames, add, function(err, results) {
-					var newFiles;
-
+				processDependencies(bowerJson, matchingDependencyNames, function(err, newFiles) {
 					if (err) {
 						cb(err);
 					} else {
-						results.forEach(function(result) {
-							that.addSource(result.filenames);
-							newFiles = files.concat(result.newFiles);
+						newFiles.forEach(function(newFile) {
+							var exists = find(files, function(file) {
+								return file.filename() === newFile.filename();
+							});
+
+							if (!exists) {
+								that.addSource(newFile.filename());
+								files.push(newFile);
+							}
 						});
 
-						cb(null, newFiles);
+						cb(null, files);
 					}
 				});
 			}
