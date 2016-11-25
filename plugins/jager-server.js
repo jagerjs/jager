@@ -32,10 +32,10 @@ var indexFiles = ['/index.html'];
 
 function _serve(response, file) {
 	response.writeHead(200, {
-		'Content-Length': file.file.contents().length,
+		'Content-Length': file.file.buffer().length,
 	});
 
-	response.end(file.file.contents());
+	response.end(file.file.buffer());
 }
 
 function Server(port, serveIndex) {
