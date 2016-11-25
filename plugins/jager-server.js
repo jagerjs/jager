@@ -19,6 +19,7 @@
 
 var http = require('http');
 var path = require('path');
+var url = require('url');
 var each = require('lodash/each');
 
 var connect = require('connect');
@@ -52,13 +53,14 @@ Server.prototype._serveFile = function(request, response) {
 	var files = this._getListOfFiles();
 	var found = false;
 	var indexFile = null;
+	var parsedUrl = url.parse(request.url);
 
 	files.forEach(function(file) {
 		if (indexFiles.indexOf(file.url) !== -1) {
 			indexFile = file;
 		}
 
-		if (request.url === file.url) {
+		if (parsedUrl.pathname === file.url) {
 			found = true;
 
 			_serve(response, file);
