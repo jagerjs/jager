@@ -23,7 +23,7 @@ var jager = require('./../jager');
 
 var __root = process.cwd();
 
-function loadBowerJson(base, cb) {
+function loadBowerJson(addDependency, base, cb) {
 	var defaultBowerJson = path.join(base, 'bower.json');
 
 	fs.readFile(defaultBowerJson, 'utf8', function(err, contents) {
@@ -31,6 +31,7 @@ function loadBowerJson(base, cb) {
 			cb(err);
 		} else {
 			try {
+				addDependency(defaultBowerJson);
 				cb(null, JSON.parse(contents));
 			} catch (e) {
 				cb(e);
@@ -66,7 +67,7 @@ function loadBowerDirectory(base, cb) {
 	});
 }
 
-function createAdd(bowerJson) {
+function createAdd(addDependency, bowerJson) {
 	return function add(name, cb) {
 		if (!bowerJson.dependencies[name]) {
 			cb(new Error('Invalid dependency: ' + name));
@@ -75,7 +76,7 @@ function createAdd(bowerJson) {
 				if (err) {
 					cb(err);
 				} else {
-					loadBowerJson(path.join(directory, name), function(err, dependencyBowerJson) {
+					loadBowerJson(addDependency, path.join(directory, name), function(err, dependencyBowerJson) {
 						var filenames;
 
 						if (err) {
@@ -98,12 +99,12 @@ function createAdd(bowerJson) {
 	};
 }
 
-function processResults(result, cb) {
+function processResults(addDependency, result, cb) {
 	var files = [];
 
 	if (result.bowerJson && result.bowerJson.dependencies) {
 		var dependenciesNames = Object.keys(result.bowerJson.dependencies);
-		processDependencies(result.bowerJson, dependenciesNames, function(err, rs) {
+		processDependencies(addDependency, result.bowerJson, dependenciesNames, function(err, rs) {
 			if (err) {
 				cb(err);
 			} else {
@@ -116,14 +117,14 @@ function processResults(result, cb) {
 	}
 }
 
-function processDependencies(bowerJson, dependencies, cb) {
-	var add = createAdd(bowerJson);
+function processDependencies(addDependency, bowerJson, dependencies, cb) {
+	var add = createAdd(addDependency, bowerJson);
 
 	async.map(dependencies, add, function(err, results) {
 		if (err) {
 			cb(err);
 		} else {
-			async.map(results, processResults, function(err, dependenciesResult) {
+			async.map(results, processResults.bind(this, addDependency), function(err, dependenciesResult) {
 				var files = [];
 
 				if (err) {
@@ -148,7 +149,11 @@ module.exports = function(name) {
 	return function bowerSrc(files, cb) {
 		var that = this;
 
-		loadBowerJson(__root, function(err, bowerJson) {
+		function addDependency(dependency) {
+			that.addDependency(dependency);
+		}
+
+		loadBowerJson(addDependency, __root, function(err, bowerJson) {
 			var matchingDependencyNames;
 
 			if (err) {
@@ -159,7 +164,7 @@ module.exports = function(name) {
 				matchingDependencyNames = Object.keys(bowerJson.dependencies)
 					.filter(function(dep) { return minimatch(dep, name); });
 
-				processDependencies(bowerJson, matchingDependencyNames, function(err, newFiles) {
+				processDependencies(addDependency, bowerJson, matchingDependencyNames, function(err, newFiles) {
 					if (err) {
 						cb(err);
 					} else {
