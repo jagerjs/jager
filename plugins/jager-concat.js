@@ -25,7 +25,7 @@ module.exports = function(filename) {
 	return function concat(files, cb) {
 		var file = new jager.File(
 			path.join(__root, filename),
-			Buffer.concat(files.map(function(file) { return file.buffer(); }))
+			files.map(function(file) { return file.contents(); }).join('\n')
 			);
 
 		cb(null, [file]);
