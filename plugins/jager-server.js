@@ -24,6 +24,7 @@ var url = require('url');
 var each = require('lodash/each');
 
 var connect = require('connect');
+var mimeTypes = require('mime-types');
 
 var __root = process.cwd();
 
@@ -32,9 +33,14 @@ var DEFAULT_PORT = 3000;
 var indexFiles = ['/index.html'];
 
 function _serve(response, file) {
-	response.writeHead(200, {
-		'Content-Length': file.file.buffer().length,
-	});
+	var contentType = mimeTypes.contentType(path.extname(file.url));
+
+	response.statusCode = 200;
+	response.setHeader('Content-Length', file.file.buffer().length);
+
+	if (contentType) {
+		response.setHeader('Content-Type', contentType);
+	}
 
 	response.end(file.file.buffer());
 }
