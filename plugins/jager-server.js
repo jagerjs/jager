@@ -13,6 +13,7 @@
  * - `options`:
  *     - `port`: port used for the server (defaults to 3000)
  *     - `serveIndex`: serve the index file when if file is not found (defaults to `false`)
+ *     - `base`: gets stripped from URL, for exmaple you would provide the name of your build dir
  */
 
 'use strict';
@@ -38,9 +39,10 @@ function _serve(response, file) {
 	response.end(file.file.buffer());
 }
 
-function Server(port, serveIndex) {
+function Server(port, serveIndex, base) {
 	this._files = {};
 	this._serveIndex = serveIndex;
+	this._base = base;
 
 	var app = connect();
 
@@ -68,7 +70,7 @@ Server.prototype._serveFile = function(request, response) {
 	});
 
 	if (!found) {
-		if (this._serveIndex && indexFile) {
+		if (this._serveIndex && indexFile && !request.url.match(/manifest/)) {
 			_serve(response, indexFile);
 		} else {
 			this._serveListOfFiles(response);
@@ -96,10 +98,12 @@ Server.prototype._serveListOfFiles = function(response) {
 Server.prototype._getListOfFiles = function() {
 	var files = [];
 
+	var root = path.join(__root, this._base);
+
 	each(this._files, function(fileList) {
 		files = files.concat(fileList.map(function(file) {
 			return {
-				url: '/' + path.relative(__root, file.filename()),
+				url: '/' + path.relative(root, file.filename()),
 				file: file,
 			};
 		}));
@@ -118,12 +122,13 @@ module.exports = function(rawOptions) {
 	var options = rawOptions || {};
 	var port = parseInt(options.port || DEFAULT_PORT, 10);
 	var serveIndex = !!options.serveIndex;
+	var base = options.base || '';
 
 	return function server(files, cb) {
 		var chainId = this.getChainId();
 
 		if (!serverInstances[port]) {
-			serverInstances[port] = new Server(port, serveIndex);
+			serverInstances[port] = new Server(port, serveIndex, base);
 		}
 
 		serverInstances[port].setFiles(chainId, files);
