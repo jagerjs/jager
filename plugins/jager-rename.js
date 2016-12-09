@@ -26,6 +26,9 @@ var __root = process.cwd();
 var REPLACERS_DETECT = /\[[a-z]+\]/;
 
 var replacers = {
+	filename: function(file) {
+		return path.basename(file.filename());
+	},
 	basename: function(file) {
 		var filename = file.filename();
 		return path.basename(filename, path.extname(filename));
