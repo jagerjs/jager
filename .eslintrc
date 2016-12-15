@@ -6,6 +6,7 @@
 			"func-names": "off",
 			"comma-dangle": ["warn", "always-multiline"],
 			"no-shadow": "off",
+			"no-inner-declarations": "off",
 			"no-script-url": "off"
 		}
 }
