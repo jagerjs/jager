@@ -18,7 +18,7 @@ var CleanCSS = require('clean-css');
 
 var gatedMap = require('./../lib/gated-map');
 
-function processCss(context, options, file, cb) {
+function processCss(options, context, file, cb) {
 	new CleanCSS(options).minify(file.contents(), function(err, minified) {
 		if (err) {
 			cb(err);
@@ -30,7 +30,5 @@ function processCss(context, options, file, cb) {
 }
 
 module.exports = function(options) {
-	return function(files, cb) {
-		gatedMap('**/*.css', files, processCss.bind(null, this, options), cb);
-	};
+	return gatedMap({ glob: '**/*.css', production: true }, processCss.bind(null, options));
 };

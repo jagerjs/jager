@@ -49,13 +49,13 @@ function getBabelTransform(options) {
 	return babelify.configure(babelOptions);
 }
 
-function createBrowserifyInstance(options, file) {
+function createBrowserifyInstance(context, options, file) {
 	var browserifyOptions = {
 		debug: !!options.sourceMap,
 	};
 	var b;
 
-	if (options.watch) {
+	if (context.isWatching()) {
 		// used by watchify
 		extend(browserifyOptions, {
 			cache: {},
@@ -74,12 +74,14 @@ function createBrowserifyInstance(options, file) {
 	return b.require(file.filename(), { entry: true });
 }
 
-function getBrowserifyInstance(options, addDependency, file) {
+function getBrowserifyInstance(context, options, file) {
 	if (!_instanceCache[file.filename()]) {
-		_instanceCache[file.filename()] = createBrowserifyInstance(options, file);
-		_instanceCache[file.filename()].on('file', addDependency);
+		_instanceCache[file.filename()] = createBrowserifyInstance(context, options, file);
+		_instanceCache[file.filename()].on('file', function(file) {
+			context.addDependency(file);
+		});
 
-		if (options.watch) {
+		if (context.isWatching()) {
 			_instanceCache[file.filename()] = watchify(_instanceCache[file.filename()]);
 		} else {
 			_instanceCache[file.filename()] = _instanceCache[file.filename()];
@@ -89,8 +91,8 @@ function getBrowserifyInstance(options, addDependency, file) {
 	return _instanceCache[file.filename()];
 }
 
-function processBrowserify(options, addDependency, file, cb) {
-	var b = getBrowserifyInstance(options, addDependency, file);
+function processBrowserify(options, context, file, cb) {
+	var b = getBrowserifyInstance(context, options, file);
 	var stream = b.bundle();
 	var bufferList = [];
 	var errorEmitted = false;
@@ -138,17 +140,5 @@ function processBrowserify(options, addDependency, file, cb) {
 module.exports = function(rawOptions) {
 	var options = rawOptions || {};
 
-	return function(files, cb) {
-		var that = this;
-
-		function addDependency(dependency) {
-			that.addDependency(dependency);
-		}
-
-		if (this.isWatching()) {
-			options.watch = true;
-		}
-
-		gatedMap('**/*.js', files, processBrowserify.bind(null, options, addDependency), cb);
-	};
+	return gatedMap({ glob: '**/*.js' }, processBrowserify.bind(null, options));
 };

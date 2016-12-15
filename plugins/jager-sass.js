@@ -22,7 +22,7 @@ var gatedMap = require('./../lib/gated-map');
 
 var __root = process.cwd();
 
-function compileSass(context, options, file, cb) {
+function compileSass(options, context, file, cb) {
 	var basePath = options.basePath || __root;
 
 	var sassOptions = {
@@ -50,7 +50,5 @@ function compileSass(context, options, file, cb) {
 module.exports = function(rawOptions) {
 	var options = rawOptions || {};
 
-	return function sass(files, cb) {
-		gatedMap('**/{*.scss,*.sass}', files, compileSass.bind(null, this, options), cb);
-	};
+	return gatedMap({ glob: '**/{*.scss,*.sass}' }, compileSass.bind(null, options));
 };

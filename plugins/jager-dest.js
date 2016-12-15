@@ -18,8 +18,8 @@ var path = require('path');
 var fs = require('fs');
 
 var mkdirp = require('mkdirp');
-var async = require('async');
 
+var gatedMap = require('./../lib/gated-map');
 var newer = require('./jager-newer');
 
 function writeFile(pathname, file, cb) {
@@ -43,30 +43,30 @@ function write(pathname, file, cb) {
 	});
 }
 
+function processor(newerInstance, context, file, cb) {
+	newerInstance.single(file, function(err, result) {
+		if (err) {
+			cb(err);
+		} else if (result.newer) {
+			file.rename(result.to);
+			file.stat(result.stat);
+
+			cb(null, file);
+		} else {
+			write(result.to, file, function(err) {
+				if (err) {
+					cb(err);
+				} else {
+					file.rename(result.to);
+					cb(null, file);
+				}
+			});
+		}
+	});
+}
+
 module.exports = function(target, options) {
 	var newerInstance = newer(target, options);
 
-	return function dest(files, cb) {
-		async.map(files, function(file, cb) {
-			newerInstance.single(file, function(err, result) {
-				if (err) {
-					cb(err);
-				} else if (result.newer) {
-					file.rename(result.to);
-					file.stat(result.stat);
-
-					cb(null, file);
-				} else {
-					write(result.to, file, function(err) {
-						if (err) {
-							cb(err);
-						} else {
-							file.rename(result.to);
-							cb(null, file);
-						}
-					});
-				}
-			});
-		}, cb);
-	};
+	return gatedMap(null, processor.bind(null, newerInstance));
 };

@@ -20,7 +20,7 @@ var options = {
 };
 
 module.exports = function() {
-	function processNgAnnotate(file, cb) {
+	function processNgAnnotate(context, file, cb) {
 		var annotateResult = ngAnnotate(file.contents(), options);
 
 		if (annotateResult.errors) {
@@ -31,7 +31,5 @@ module.exports = function() {
 		}
 	}
 
-	return function(files, cb) {
-		gatedMap('**/*.js', files, processNgAnnotate, cb);
-	};
+	return gatedMap({ glob: '**/*.js' }, processNgAnnotate);
 };

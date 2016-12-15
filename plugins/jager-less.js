@@ -22,7 +22,7 @@ var gatedMap = require('./../lib/gated-map');
 
 var __root = process.cwd();
 
-function compileLess(context, options, file, cb) {
+function compileLess(options, context, file, cb) {
 	var basePath = options.basePath || __root;
 
 	var lessOptions = {
@@ -53,7 +53,5 @@ function compileLess(context, options, file, cb) {
 module.exports = function(rawOptions) {
 	var options = rawOptions || {};
 
-	return function less(files, cb) {
-		gatedMap('**/*.less', files, compileLess.bind(null, this, options), cb);
-	};
+	return gatedMap({ glob: '**/*.less' }, compileLess.bind(null, options));
 };

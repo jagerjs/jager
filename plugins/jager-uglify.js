@@ -13,7 +13,7 @@ var uglifyJs = require('uglify-js');
 
 var gatedMap = require('./../lib/gated-map');
 
-function minify(file, cb) {
+function minify(context, file, cb) {
 	try {
 		file.contents(uglifyJs.minify(file.contents(), { fromString: true }).code);
 		cb(null, file);
@@ -23,7 +23,5 @@ function minify(file, cb) {
 }
 
 module.exports = function() {
-	return function uglify(files, cb) {
-		gatedMap('**/*.js', files, minify, cb);
-	};
+	return gatedMap({ glob: '**/*.js', production: true }, minify);
 };

@@ -29,7 +29,7 @@ var imageminSvgo = require('imagemin-svgo');
 
 var gatedMap = require('./../lib/gated-map');
 
-function minifyImage(options, file, cb) {
+function minifyImage(options, context, file, cb) {
 	var imageminOptions = {
 		use: [
 			imageminGifsicle(options.gifsicle),
@@ -52,7 +52,5 @@ function minifyImage(options, file, cb) {
 module.exports = function(rawOptions) {
 	var options = rawOptions || {};
 
-	return function(files, cb) {
-		gatedMap('**/*.+(png|jpg|jpeg|gif|svg)', files, minifyImage.bind(null, options), cb);
-	};
+	return gatedMap({ glob: '**/*.+(png|jpg|jpeg|gif|svg)' }, minifyImage.bind(null, options));
 };

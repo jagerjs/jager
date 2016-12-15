@@ -21,12 +21,10 @@ var autoprefixer = require('autoprefixer');
 var gatedMap = require('./../lib/gated-map');
 
 module.exports = function(browserVersions) {
-	function prefix(file, cb) {
+	function prefix(context, file, cb) {
 		file.contents(autoprefixer.process(file.contents(), browserVersions).css);
 		cb(null, file);
 	}
 
-	return function(files, cb) {
-		gatedMap('**/*.css', files, prefix, cb);
-	};
+	return gatedMap({ glob: '**/*.css' }, prefix);
 };

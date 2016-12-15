@@ -29,18 +29,16 @@ module.exports = function(options) {
 	var base = (options && options.base || '').replace(/\/$/, '') + '/';
 	var filename = options && options.filename || 'templates.js';
 
-	function process(file, cb) {
+	function process(context, file, cb) {
 		var url = file.filename().replace(path.join(__root, base), '');
 		cb(null, '$templateCache.put("' + url + '", "' + jsStringEscape(file.contents()) + '");');
 	}
 
-	return function angularTemplates(files, cb) {
-		gatedMap('**/*.html', files, process, function(err, newFiles) {
-			if (err) {
-				cb(err);
-			} else {
-				cb(null, [new jager.File(path.join(__root, base, filename), new Buffer(prefix + newFiles.join('') + suffix))]);
-			}
-		});
-	};
+	return gatedMap('**/*.html', process, function(err, newFiles, cb) {
+		if (err) {
+			cb(err);
+		} else {
+			cb(null, [new jager.File(path.join(__root, base, filename), new Buffer(prefix + newFiles.join('') + suffix))]);
+		}
+	});
 };

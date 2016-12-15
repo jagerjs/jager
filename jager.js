@@ -75,12 +75,12 @@ module.exports = {
 			Logger.error('Duplicate task name: ' + name);
 		}
 	},
-	run: function(tasklist, debug) {
-		Logger.setDebug(debug);
+	run: function(tasklist, options) {
+		Logger.setDebug(options.debug);
 
 		tasklist.forEach(function(task) {
 			if (tasks[task]) {
-				tasks[task].run();
+				tasks[task].run(options.production);
 			} else {
 				Logger.error('Unknown task: ' + task);
 			}

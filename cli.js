@@ -6,12 +6,13 @@ var subarg = require('subarg');
 
 // applies only to top level command
 var argOptions = {
-	'boolean': [ 'watch' ],
+	'boolean': [ 'watch', 'production' ],
 	alias: {
 		w: [ 'watch' ],
 	},
 	'default': {
 		watch: false,
+		production: false,
 	},
 };
 
@@ -28,6 +29,9 @@ var cli = new Liftoff({
 cli.launch({}, function(env) {
 	var jager = require(env.modulePath);
 	var tasks = [];
+	var production = process.env.NODE_ENV === 'production'
+		|| argv.production === true
+		|| argv.env === 'production';
 
 	if (env.configPath) {
 		require(env.configPath);
@@ -56,5 +60,8 @@ cli.launch({}, function(env) {
 		});
 	}
 
-	jager.run(tasks, argv.debug === true);
+	jager.run(tasks, {
+		debug: argv.debug === true,
+		production: production,
+	});
 });

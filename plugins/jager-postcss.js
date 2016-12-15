@@ -19,7 +19,7 @@ var postcss = require('postcss');
 
 var gatedMap = require('./../lib/gated-map');
 
-function process(options, file, cb) {
+function process(options, context, file, cb) {
 	var result = postcss(options.plugins || []).process(file.contents());
 
 	result.then(function(processor) {
@@ -33,7 +33,5 @@ function process(options, file, cb) {
 module.exports = function(rawOptions) {
 	var options = rawOptions || {};
 
-	return function(files, cb) {
-		gatedMap('**/*.css', files, process.bind(null, options), cb);
-	};
+	return gatedMap({ glob: '**/*.css' }, process.bind(null, options));
 };
