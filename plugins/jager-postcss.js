@@ -16,7 +16,8 @@
 'use strict';
 
 var postcss = require('postcss');
-var async = require('async');
+
+var gatedMap = require('./../lib/gated-map');
 
 function process(options, file, cb) {
 	var result = postcss(options.plugins || []).process(file.contents());
@@ -33,6 +34,6 @@ module.exports = function(rawOptions) {
 	var options = rawOptions || {};
 
 	return function(files, cb) {
-		async.map(files, process.bind(null, options), cb);
+		gatedMap('**/*.css', files, process.bind(null, options), cb);
 	};
 };

@@ -9,8 +9,9 @@
 
 'use strict';
 
-var async = require('async');
 var uglifyJs = require('uglify-js');
+
+var gatedMap = require('./../lib/gated-map');
 
 function minify(file, cb) {
 	try {
@@ -23,6 +24,6 @@ function minify(file, cb) {
 
 module.exports = function() {
 	return function uglify(files, cb) {
-		async.map(files, minify, cb);
+		gatedMap('**/*.js', files, minify, cb);
 	};
 };

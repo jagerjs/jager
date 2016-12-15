@@ -16,8 +16,9 @@
 var path = require('path');
 var extend = require('util')._extend;
 
-var async = require('async');
 var sass = require('node-sass');
+
+var gatedMap = require('./../lib/gated-map');
 
 var __root = process.cwd();
 
@@ -50,6 +51,6 @@ module.exports = function(rawOptions) {
 	var options = rawOptions || {};
 
 	return function sass(files, cb) {
-		async.map(files, compileSass.bind(null, this, options), cb);
+		gatedMap('**/{*.scss,*.sass}', files, compileSass.bind(null, this, options), cb);
 	};
 };

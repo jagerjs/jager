@@ -15,7 +15,8 @@
 'use strict';
 
 var CleanCSS = require('clean-css');
-var async = require('async');
+
+var gatedMap = require('./../lib/gated-map');
 
 function processCss(context, options, file, cb) {
 	new CleanCSS(options).minify(file.contents(), function(err, minified) {
@@ -30,6 +31,6 @@ function processCss(context, options, file, cb) {
 
 module.exports = function(options) {
 	return function(files, cb) {
-		async.map(files, processCss.bind(null, this, options), cb);
+		gatedMap('**/*.css', files, processCss.bind(null, this, options), cb);
 	};
 };

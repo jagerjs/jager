@@ -27,18 +27,7 @@ var imageminJpegtran = require('imagemin-jpegtran');
 var imageminOptipng = require('imagemin-optipng');
 var imageminSvgo = require('imagemin-svgo');
 
-var minimatch = require('minimatch');
-var async = require('async');
-
-var pattern = new minimatch.Minimatch('**/*.+(png|jpg|jpeg|gif|svg)');
-
-function process(options, file, cb) {
-	if (pattern.match(file.filename())) {
-		minifyImage(options, file, cb);
-	} else {
-		cb(null, file);
-	}
-}
+var gatedMap = require('./../lib/gated-map');
 
 function minifyImage(options, file, cb) {
 	var imageminOptions = {
@@ -64,6 +53,6 @@ module.exports = function(rawOptions) {
 	var options = rawOptions || {};
 
 	return function(files, cb) {
-		async.map(files, process.bind(null, options), cb);
+		gatedMap('**/*.+(png|jpg|jpeg|gif|svg)', files, minifyImage.bind(null, options), cb);
 	};
 };

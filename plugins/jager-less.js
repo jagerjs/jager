@@ -16,8 +16,9 @@
 var path = require('path');
 var extend = require('util')._extend;
 
-var async = require('async');
 var less = require('less');
+
+var gatedMap = require('./../lib/gated-map');
 
 var __root = process.cwd();
 
@@ -53,6 +54,6 @@ module.exports = function(rawOptions) {
 	var options = rawOptions || {};
 
 	return function less(files, cb) {
-		async.map(files, compileLess.bind(null, this, options), cb);
+		gatedMap('**/*.less', files, compileLess.bind(null, this, options), cb);
 	};
 };

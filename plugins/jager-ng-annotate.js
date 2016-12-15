@@ -12,7 +12,8 @@
 'use strict';
 
 var ngAnnotate = require('ng-annotate');
-var async = require('async');
+
+var gatedMap = require('./../lib/gated-map');
 
 var options = {
 	add: true,
@@ -31,6 +32,6 @@ module.exports = function() {
 	}
 
 	return function(files, cb) {
-		async.map(files, processNgAnnotate, cb);
+		gatedMap('**/*.js', files, processNgAnnotate, cb);
 	};
 };

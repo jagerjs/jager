@@ -21,7 +21,6 @@
 
 var path = require('path');
 
-var async = require('async');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var babelify = require('babelify');
@@ -31,6 +30,8 @@ var extend = require('util')._extend;
 var babelPresetEs2015 = require('babel-preset-es2015');
 var babelPresetReact = require('babel-preset-react');
 var babelPresetStage0 = require('babel-preset-stage-0');
+
+var gatedMap = require('./../lib/gated-map');
 
 var __root = process.cwd();
 
@@ -148,6 +149,6 @@ module.exports = function(rawOptions) {
 			options.watch = true;
 		}
 
-		async.map(files, processBrowserify.bind(null, options, addDependency), cb);
+		gatedMap('**/*.js', files, processBrowserify.bind(null, options, addDependency), cb);
 	};
 };

@@ -17,7 +17,8 @@
 'use strict';
 
 var autoprefixer = require('autoprefixer');
-var async = require('async');
+
+var gatedMap = require('./../lib/gated-map');
 
 module.exports = function(browserVersions) {
 	function prefix(file, cb) {
@@ -26,6 +27,6 @@ module.exports = function(browserVersions) {
 	}
 
 	return function(files, cb) {
-		async.map(files, prefix, cb);
+		gatedMap('**/*.css', files, prefix, cb);
 	};
 };

@@ -15,10 +15,10 @@
 
 var path = require('path');
 
-var async = require('async');
 var jsStringEscape = require('js-string-escape');
 
 var jager = require('../jager');
+var gatedMap = require('./../lib/gated-map');
 
 var __root = process.cwd();
 
@@ -35,7 +35,7 @@ module.exports = function(options) {
 	}
 
 	return function angularTemplates(files, cb) {
-		async.map(files, process, function(err, newFiles) {
+		gatedMap('**/*.html', files, process, function(err, newFiles) {
 			if (err) {
 				cb(err);
 			} else {
