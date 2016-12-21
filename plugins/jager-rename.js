@@ -7,6 +7,9 @@
  * **API**: `('rename', filename)`
  *
  * - `filename`: the new filename. The following replacements will be done in the filename:
+ *     - `[filename]`: the filename
+ *     - `[basename]`: the filename without extension
+ *     - `[extension]`: the extension
  *     - `[timestamp]`: the current timestamp is included
  *     - `[hash]`: the md5 checksum of the contents is included
  */
@@ -40,7 +43,7 @@ var replacers = {
 		return Date.now();
 	},
 	hash: function(file) {
-		return crypto.createHash('md5').update(file.contents()).digest('hex');
+		return crypto.createHash('md5').update(file.buffer()).digest('hex');
 	},
 };
 
