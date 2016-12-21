@@ -108,8 +108,10 @@ Server.prototype._getListOfFiles = function() {
 
 	each(this._files, function(fileList) {
 		files = files.concat(fileList.map(function(file) {
+			var url = file.isUrl() ? file.filename() : ('/' + path.relative(root, file.filename()));
+
 			return {
-				url: '/' + path.relative(root, file.filename()),
+				url: url,
 				file: file,
 			};
 		}));
