@@ -36,6 +36,7 @@
 		"babel-preset-stage-0": "6.5.0",
 		"uglify-js": "2.7.0",
 		"ng-annotate": "1.2.1",
+		"envify": "4.0.0",
 
 		"imagemin": "5.2.2",
 		"imagemin-gifsicle": "5.1.0",
