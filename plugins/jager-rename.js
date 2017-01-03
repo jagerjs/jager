@@ -29,36 +29,44 @@ var __root = process.cwd();
 var REPLACERS_DETECT = /\[[a-z]+\]/;
 
 var replacers = {
-	filename: function(file) {
+	filename: function(context, file) {
 		return path.basename(file.filename());
 	},
-	basename: function(file) {
+	basename: function(context, file) {
 		var filename = file.filename();
 		return path.basename(filename, path.extname(filename));
 	},
-	extension: function(file) {
+	extension: function(context, file) {
 		return path.extname(file.filename());
 	},
-	timestamp: function() {
-		return Date.now();
+	timestamp: function(context) {
+		if (context.getProduction()) {
+			return Date.now();
+		}
+
+		return 123456789;
 	},
-	hash: function(file) {
-		return crypto.createHash('md5').update(file.buffer()).digest('hex');
+	hash: function(context, file) {
+		if (context.getProduction()) {
+			return crypto.createHash('md5').update(file.buffer()).digest('hex');
+		}
+
+		return 'deadbeef';
 	},
 };
 
-function formatFilename(filename, file) {
+function formatFilename(context, filename, file) {
 	var formattedFilename = filename;
 
 	each(replacers, function(replacer, key) {
-		formattedFilename = formattedFilename.replace('[' + key + ']', replacer.bind(null, file));
+		formattedFilename = formattedFilename.replace('[' + key + ']', replacer.bind(null, context, file));
 	});
 
 	return formattedFilename;
 }
 
-function renameFile(filename, file, cb) {
-	file.rename(path.join(__root, formatFilename(filename, file)));
+function renameFile(context, filename, file, cb) {
+	file.rename(path.join(__root, formatFilename(context, filename, file)));
 	cb(null, file);
 }
 
@@ -67,6 +75,7 @@ module.exports = function(filename) {
 
 	return function rename(files, cb) {
 		var filesToBeRenamed = files;
+		var context = this;
 
 		if (files.length === 0) {
 			if (hasReplacers) {
@@ -78,6 +87,6 @@ module.exports = function(filename) {
 			throw new Error('More than one file is unsupported');
 		}
 
-		async.map(filesToBeRenamed, renameFile.bind(null, filename), cb);
+		async.map(filesToBeRenamed, renameFile.bind(null, context, filename), cb);
 	};
 };
