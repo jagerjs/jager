@@ -14,7 +14,7 @@
  *     - `region`: aws region for your s3 bucket
  *     - `bucket`: bucket to upload to
  *     - `base`: gets stripped from URL, for exmaple you would provide the name of your build dir
- *     - `headers`: extra headers for files, ex: `{ '/index.html': { CacheControl: 'no-cache' } }` (in AWS format)
+ *     - `headers`: extra headers for files, ex: `{ 'index.html': { CacheControl: 'no-cache' } }` (in AWS format)
  */
 
 'use strict';
@@ -26,6 +26,7 @@ var _ = require('lodash');
 var async = require('async');
 var S3 = require('aws-sdk/clients/s3');
 var mimeTypes = require('mime-types');
+var minimatch = require('minimatch');
 
 var __root = process.cwd();
 
@@ -65,8 +66,8 @@ function getUploadInfo(base, bucket, headersInfo, files) {
 			params.ContentType = contentType;
 		}
 
-		_.each(headersInfo, function(headers, filename) {
-			if (filename === relativeFilename) {
+		_.each(headersInfo, function(headers, filenameGlob) {
+			if (minimatch(relativeFilename, filenameGlob)) {
 				_.each(headers, function(value, name) {
 					params[name] = value;
 				});
@@ -158,6 +159,8 @@ module.exports = function(options) {
 		if (!assert(options, cb)) {
 			return;
 		}
+
+		this.log('Uploading to "' + options.bucket + '"...');
 
 		var uploadInfo = getUploadInfo(options.base, options.bucket, headers, files);
 
