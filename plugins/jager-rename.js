@@ -22,13 +22,14 @@ var crypto = require('crypto');
 var each = require('lodash/each');
 var async = require('async');
 
-var jager = require('./../jager');
-
 var __root = process.cwd();
 
 var REPLACERS_DETECT = /\[[a-z]+\]/;
 
 var replacers = {
+	dirname: function(context, file) {
+		return path.dirname(file.filename()).replace(__root, '');
+	},
 	filename: function(context, file) {
 		return path.basename(file.filename());
 	},
@@ -77,13 +78,7 @@ module.exports = function(filename) {
 		var filesToBeRenamed = files;
 		var context = this;
 
-		if (files.length === 0) {
-			if (hasReplacers) {
-				throw new Error('No source found for replacers');
-			}
-
-			filesToBeRenamed = [new jager.File('foo.bar', new Buffer(''))];
-		} else if (files.length > 1 && !hasReplacers) {
+		if (files.length > 1 && !hasReplacers) {
 			throw new Error('More than one file is unsupported');
 		}
 
