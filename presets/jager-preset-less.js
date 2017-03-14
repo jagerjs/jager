@@ -26,6 +26,4 @@ module.exports = function less(rawOptions) {
 
 	jager.task('less', less);
 	jager.task('less:watch', { watch: true }, less);
-
-	return less;
 };

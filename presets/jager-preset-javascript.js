@@ -29,6 +29,4 @@ module.exports = function javascript(rawOptions) {
 
 	jager.task('javascript', javascript);
 	jager.task('javascript:watch', { watch: true }, javascript);
-
-	return javascript;
 };
