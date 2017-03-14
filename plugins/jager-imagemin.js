@@ -52,5 +52,5 @@ function minifyImage(options, context, file, cb) {
 module.exports = function(rawOptions) {
 	var options = rawOptions || {};
 
-	return gatedMap({ glob: '**/*.+(png|jpg|jpeg|gif|svg)' }, minifyImage.bind(null, options));
+	return gatedMap({ glob: '**/*.+(png|jpg|jpeg|gif|svg)', production: true }, minifyImage.bind(null, options));
 };
