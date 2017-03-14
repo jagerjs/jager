@@ -41,10 +41,20 @@ cli.launch({}, function(env) {
 		var presets = Array.isArray(argv.preset) ? argv.preset : [argv.preset];
 
 		presets.forEach(function(preset) {
-			var name = preset.name ? preset.name : preset._.shift();
-			delete preset.name;
+			var name;
 
-			var options = preset._.shift();
+			if (typeof preset === 'string') {
+				name = preset;
+			} else if (preset.name) {
+				name = preset.name;
+				delete preset.name;
+			} else if (preset._ && preset._.length) {
+				name = preset._.shift();
+			} else {
+				throw new Error('Invalid preset name');
+			}
+
+			var options = preset;
 			delete options._;
 
 			var watch = (!!preset.watch) || argv.watch;
