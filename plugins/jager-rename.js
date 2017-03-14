@@ -40,14 +40,14 @@ var replacers = {
 		return path.extname(file.filename());
 	},
 	timestamp: function(context) {
-		if (context.getProduction()) {
+		if (context.isProduction()) {
 			return Date.now();
 		}
 
 		return 123456789;
 	},
 	hash: function(context, file) {
-		if (context.getProduction()) {
+		if (context.isProduction()) {
 			return crypto.createHash('md5').update(file.buffer()).digest('hex');
 		}
 
