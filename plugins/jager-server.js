@@ -61,14 +61,14 @@ Server.prototype._serveFile = function(request, response) {
 	var files = this._getListOfFiles();
 	var found = false;
 	var indexFile = null;
-	var pathname = decodeURIComponent(url.parse(request.url).pathname);
+	var parsedUrl = url.parse(request.url);
 
 	files.forEach(function(file) {
 		if (indexFiles.indexOf(file.url) !== -1) {
 			indexFile = file;
 		}
 
-		if (pathname === file.url) {
+		if (parsedUrl.pathname === file.url) {
 			found = true;
 
 			_serve(response, file);
@@ -136,6 +136,7 @@ module.exports = function(rawOptions) {
 		var chainId = this.getChainId();
 
 		if (!serverInstances[port]) {
+			this.log('Starting server on port ' + port);
 			serverInstances[port] = new Server(port, serveIndex, base);
 		}
 
