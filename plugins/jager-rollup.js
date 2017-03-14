@@ -45,11 +45,19 @@ function rollupFile(options, context, file, cb) {
 			}),
 		],
 	}).then(function(bundle) {
+		var sourceMap = options.sourceMap !== false;
+		var bundleOptions = {
+			format: 'umd',
+		};
+		var content;
+
+		if (sourceMap) {
+			bundleOptions.sourceMap = true;
+		}
+
 		_bundleCache[file.filename()] = bundle;
 
-		var result = bundle.generate({
-			format: 'umd',
-		});
+		var result = bundle.generate(bundleOptions);
 
 		bundle.modules.forEach(function(module) {
 			if (!/\0/.test(module.id)) {
@@ -57,7 +65,13 @@ function rollupFile(options, context, file, cb) {
 			}
 		});
 
-		file.contents(result.code);
+		content = result.code;
+
+		if (sourceMap) {
+			content += '\n//# sourceMappingURL=' + result.map.toUrl() + '\n';
+		}
+
+		file.contents(content);
 
 		cb(null, file);
 	}, function(err) {
