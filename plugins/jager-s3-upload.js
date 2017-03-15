@@ -30,6 +30,8 @@ var minimatch = require('minimatch');
 
 var __root = process.cwd();
 
+var filetypeOrder = ['.js', '.css', '.html'];
+
 function assert(options, cb) {
 	if (!options.accessKeyId) {
 		cb(new Error('Invalid access key id'));
@@ -53,7 +55,7 @@ function assert(options, cb) {
 function getUploadInfo(base, bucket, headersInfo, files) {
 	var root = path.join(__root, base || '');
 
-	return files.map(function(file) {
+	var filesToUpload = files.map(function(file) {
 		var relativeFilename = path.relative(root, file.filename());
 		var contentType = mimeTypes.contentType(path.extname(file.filename()));
 		var params = {
@@ -80,6 +82,20 @@ function getUploadInfo(base, bucket, headersInfo, files) {
 			file: file,
 		};
 	});
+
+	// sort all items to make sure we don't upload sutff without uploading its
+	// dependecies first, or at least, a poor mans version, based on teh
+	// heuristic that html needs everyhing less first :)
+	filesToUpload.sort(function(first, second) {
+		var firstExtension = path.extname(first.file.filename());
+		var secondExtension = path.extname(second.file.filename());
+		var firstIndex = filetypeOrder.indexOf(firstExtension);
+		var secondIndex = filetypeOrder.indexOf(secondExtension);
+
+		return firstIndex - secondIndex;
+	});
+
+	return filesToUpload;
 }
 
 function getClearInfo(client, bucket, uploadInfo, cb) {
