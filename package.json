@@ -61,7 +61,7 @@
 		"mkdirp": "0.5.1",
 		"less": "2.7.1",
 		"pug": "2.0.0-beta11",
-		"node-sass": "3.13.0",
+		"node-sass": "4.13.1",
 		"postcss": "5.0.21",
 		"clean-css": "3.4.18",
 		"globule": "1.0.0",
