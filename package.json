@@ -47,7 +47,7 @@
 		"connect": "3.4.1",
 		"mime-types": "2.1.13",
 
-		"aws-sdk": "2.7.17",
+		"aws-sdk": "2.814.0",
 
 		"rollup": "0.41.4",
 		"rollup-plugin-babel": "2.6.1",
